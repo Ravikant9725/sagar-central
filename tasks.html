@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tasks - Sagar Central</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            color: #243b53;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #102a43;
+            color: white;
+            padding: 25px 15px;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h2 {
+            font-size: 23px;
+        }
+
+        .logo p {
+            font-size: 12px;
+            color: #bcccdc;
+            margin-top: 5px;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu li {
+            margin: 7px 0;
+        }
+
+        .menu a {
+            display: block;
+            padding: 12px 14px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: .2s;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            background: #1976d2;
+        }
+
+
+        /* ================= MAIN ================= */
+
+        .main {
+            margin-left: 240px;
+            width: calc(100% - 240px);
+            padding: 30px;
+        }
+
+
+        /* ================= HEADER ================= */
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            color: #102a43;
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .page-header p {
+            color: #627d98;
+        }
+
+
+        /* ================= BOX ================= */
+
+        .box {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+        }
+
+        .box h2 {
+            color: #102a43;
+            margin-bottom: 15px;
+        }
+
+
+        /* ================= STATISTICS ================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+            border-left: 5px solid #1976d2;
+        }
+
+        .stat-card.pending {
+            border-left-color: #f9a825;
+        }
+
+        .stat-card.progress {
+            border-left-color: #1976d2;
+        }
+
+        .stat-card.completed {
+            border-left-color: #2e7d32;
+        }
+
+        .stat-label {
+            color: #627d98;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #102a43;
+        }
+
+
+        /* ================= FORM ================= */
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        input,
+        select {
+            padding: 12px;
+            border: 1px solid #bcccdc;
+            border-radius: 8px;
+            outline: none;
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #1976d2;
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, .1);
+        }
+
+        #taskTitle {
+            flex: 1;
+        }
+
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 7px;
+            color: white;
+            background: #1976d2;
+            cursor: pointer;
+            font-size: 14px;
+            transition: .2s;
+        }
+
+        button:hover {
+            opacity: .9;
+            transform: translateY(-1px);
+        }
+
+        .edit {
+            background: #fb8c00;
+        }
+
+        .delete {
+            background: #e53935;
+        }
+
+        .cancel {
+            background: #78909c;
+        }
+
+        .complete {
+            background: #2e7d32;
+        }
+
+        #message {
+            margin-top: 12px;
+            color: #1976d2;
+            font-weight: bold;
+            min-height: 20px;
+        }
+
+
+        /* ================= SEARCH ================= */
+
+        .filter-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search {
+            flex: 1;
+            margin: 0;
+        }
+
+        .filter {
+            min-width: 180px;
+        }
+
+
+        /* ================= TASK LIST ================= */
+
+        .task-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .task-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+            border-left: 5px solid #1976d2;
+            transition: .2s;
+        }
+
+        .task-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 14px rgba(0, 0, 0, .1);
+        }
+
+        .task-card.pending {
+            border-left-color: #f9a825;
+        }
+
+        .task-card.progress {
+            border-left-color: #1976d2;
+        }
+
+        .task-card.completed {
+            border-left-color: #2e7d32;
+        }
+
+        .task-title {
+            font-weight: bold;
+            font-size: 17px;
+            color: #102a43;
+            margin-bottom: 12px;
+            word-break: break-word;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .status.pending {
+            background: #fff8e1;
+            color: #f57f17;
+        }
+
+        .status.progress {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .status.completed {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+
+        /* ================= EMPTY ================= */
+
+        .empty {
+            background: white;
+            padding: 35px 20px;
+            border-radius: 12px;
+            color: #627d98;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+        }
+
+        .empty-icon {
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+        .empty h3 {
+            color: #334e68;
+            margin-bottom: 6px;
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1000px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .task-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                width: 190px;
+            }
+
+            .main {
+                margin-left: 190px;
+                width: calc(100% - 190px);
+                padding: 15px;
+            }
+
+            .form-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #taskTitle,
+            #taskStatus {
+                width: 100%;
+            }
+
+            .filter-row {
+                flex-direction: column;
+            }
+
+            .filter {
+                width: 100%;
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .sidebar {
+                width: 170px;
+                padding: 20px 10px;
+            }
+
+            .main {
+                margin-left: 170px;
+                width: calc(100% - 170px);
+                padding: 12px;
+            }
+
+            .logo h2 {
+                font-size: 18px;
+            }
+
+            .logo p {
+                font-size: 10px;
+            }
+
+            .menu a {
+                padding: 10px 8px;
+                font-size: 13px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 22px;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+        <h2>Sagar Central</h2>
+        <p>Enterprise Management System</p>
+    </div>
+
+    <ul class="menu">
+
+        <li>
+            <a href="index.html">
+                🏠 Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a href="meetings.html">
+                📅 Meetings
+            </a>
+        </li>
+
+        <li>
+            <a href="events.html">
+                🎉 Events
+            </a>
+        </li>
+
+        <li>
+            <a href="policies.html">
+                📜 Policies
+            </a>
+        </li>
+
+        <li>
+            <a href="tasks.html" class="active">
+                ✅ Tasks
+            </a>
+        </li>
+
+        <li>
+            <a href="documents.html">
+                📄 Documents
+            </a>
+        </li>
+
+        <li>
+            <a href="ai-assistant.html">
+                🤖 AI Assistant
+            </a>
+        </li>
+
+        <li>
+            <a href="settings.html">
+                ⚙️ Settings
+            </a>
+        </li>
+
+    </ul>
+
+</aside>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <h1>✅ Tasks / Action Items</h1>
+
+        <p>
+            Manage responsibilities, action items and their progress.
+        </p>
+
+    </div>
+
+
+    <!-- ================= STATISTICS ================= -->
+
+    <div class="stats">
+
+        <div class="stat-card">
+
+            <div class="stat-label">
+                Total Tasks
+            </div>
+
+            <div class="stat-number"
+                 id="totalTasks">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card pending">
+
+            <div class="stat-label">
+                Pending
+            </div>
+
+            <div class="stat-number"
+                 id="pendingTasks">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card progress">
+
+            <div class="stat-label">
+                In Progress
+            </div>
+
+            <div class="stat-number"
+                 id="progressTasks">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card completed">
+
+            <div class="stat-label">
+                Completed
+            </div>
+
+            <div class="stat-number"
+                 id="completedTasks">
+                0
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= ADD / EDIT ================= -->
+
+    <div class="box">
+
+        <h2 id="formTitle">
+            Add New Task
+        </h2>
+
+
+        <div class="form-row">
+
+            <input
+                type="text"
+                id="taskTitle"
+                placeholder="Enter task or action item"
+            >
+
+
+            <select id="taskStatus">
+
+                <option value="Pending">
+                    Pending
+                </option>
+
+                <option value="In Progress">
+                    In Progress
+                </option>
+
+                <option value="Completed">
+                    Completed
+                </option>
+
+            </select>
+
+
+            <button
+                onclick="saveTask()"
+                id="saveButton">
+
+                Add Task
+
+            </button>
+
+
+            <button
+                onclick="cancelEdit()"
+                id="cancelButton"
+                class="cancel"
+                style="display:none;">
+
+                Cancel
+
+            </button>
+
+        </div>
+
+
+        <p id="message"></p>
+
+    </div>
+
+
+    <!-- ================= SEARCH / FILTER ================= -->
+
+    <div class="box">
+
+        <h2>
+            Task Records
+        </h2>
+
+
+        <div class="filter-row">
+
+            <input
+                class="search"
+                id="searchTask"
+                type="text"
+                placeholder="🔍 Search tasks..."
+                oninput="displayTasks()"
+            >
+
+
+            <select
+                class="filter"
+                id="filterStatus"
+                onchange="displayTasks()">
+
+                <option value="">
+                    All Status
+                </option>
+
+                <option value="Pending">
+                    Pending
+                </option>
+
+                <option value="In Progress">
+                    In Progress
+                </option>
+
+                <option value="Completed">
+                    Completed
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= TASK LIST ================= -->
+
+    <div id="taskList"
+         class="task-grid">
+    </div>
+
+
+</main>
+
+
+<script>
+
+
+/* =====================================================
+   TASK DATA
+===================================================== */
+
+let editIndex = -1;
+
+
+function getTasks() {
+
+    return JSON.parse(
+        localStorage.getItem("tasks")
+    ) || [];
+
+}
+
+
+/* =====================================================
+   SAFE HTML
+===================================================== */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =====================================================
+   STATUS CLASS
+===================================================== */
+
+function getStatusClass(status) {
+
+    if (status === "Completed") {
+        return "completed";
+    }
+
+    if (status === "In Progress") {
+        return "progress";
+    }
+
+    return "pending";
+
+}
+
+
+/* =====================================================
+   SAVE TASK
+===================================================== */
+
+function saveTask() {
+
+    let title =
+        document
+            .getElementById("taskTitle")
+            .value
+            .trim();
+
+
+    let status =
+        document
+            .getElementById("taskStatus")
+            .value;
+
+
+    let message =
+        document.getElementById("message");
+
+
+    if (title === "") {
+
+        message.innerText =
+            "Please enter a task.";
+
+        return;
+
+    }
+
+
+    let tasks = getTasks();
+
+
+    let task = {
+
+        title: title,
+
+        status: status
+
+    };
+
+
+    if (editIndex === -1) {
+
+        tasks.push(task);
+
+        message.innerText =
+            "Task added successfully!";
+
+    }
+
+    else {
+
+        tasks[editIndex] = task;
+
+        message.innerText =
+            "Task updated successfully!";
+
+        editIndex = -1;
+
+    }
+
+
+    localStorage.setItem(
+        "tasks",
+        JSON.stringify(tasks)
+    );
+
+
+    clearForm();
+
+    resetButton();
+
+    displayTasks();
+
+    updateStats();
+
+}
+
+
+/* =====================================================
+   EDIT TASK
+===================================================== */
+
+function editTask(index) {
+
+    let tasks = getTasks();
+
+    let task = tasks[index];
+
+
+    if (!task) {
+        return;
+    }
+
+
+    document
+        .getElementById("taskTitle")
+        .value = task.title;
+
+
+    document
+        .getElementById("taskStatus")
+        .value =
+            task.status || "Pending";
+
+
+    editIndex = index;
+
+
+    document
+        .getElementById("formTitle")
+        .innerText =
+            "Edit Task";
+
+
+    document
+        .getElementById("saveButton")
+        .innerText =
+            "Update Task";
+
+
+    document
+        .getElementById("cancelButton")
+        .style.display =
+            "inline-block";
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+/* =====================================================
+   DELETE TASK
+===================================================== */
+
+function deleteTask(index) {
+
+    if (
+        !confirm(
+            "Are you sure you want to delete this task?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    let tasks = getTasks();
+
+
+    tasks.splice(index, 1);
+
+
+    localStorage.setItem(
+        "tasks",
+        JSON.stringify(tasks)
+    );
+
+
+    editIndex = -1;
+
+    clearForm();
+
+    resetButton();
+
+    displayTasks();
+
+    updateStats();
+
+
+    document
+        .getElementById("message")
+        .innerText =
+            "Task deleted successfully!";
+
+}
+
+
+/* =====================================================
+   CLEAR FORM
+===================================================== */
+
+function clearForm() {
+
+    document
+        .getElementById("taskTitle")
+        .value = "";
+
+
+    document
+        .getElementById("taskStatus")
+        .value =
+            "Pending";
+
+}
+
+
+/* =====================================================
+   CANCEL EDIT
+===================================================== */
+
+function cancelEdit() {
+
+    editIndex = -1;
+
+    clearForm();
+
+    resetButton();
+
+    document
+        .getElementById("message")
+        .innerText = "";
+
+}
+
+
+/* =====================================================
+   RESET FORM BUTTON
+===================================================== */
+
+function resetButton() {
+
+    document
+        .getElementById("formTitle")
+        .innerText =
+            "Add New Task";
+
+
+    document
+        .getElementById("saveButton")
+        .innerText =
+            "Add Task";
+
+
+    document
+        .getElementById("cancelButton")
+        .style.display =
+            "none";
+
+}
+
+
+/* =====================================================
+   DISPLAY TASKS
+===================================================== */
+
+function displayTasks() {
+
+    let tasks = getTasks();
+
+
+    let query =
+        document
+            .getElementById("searchTask")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    let filter =
+        document
+            .getElementById("filterStatus")
+            .value;
+
+
+    let list =
+        document.getElementById("taskList");
+
+
+    list.innerHTML = "";
+
+
+    let filteredTasks =
+        tasks
+        .map(function(task, index) {
+
+            return {
+                task: task,
+                index: index
+            };
+
+        })
+        .filter(function(item) {
+
+            let task =
+                item.task;
+
+
+            let title =
+                String(task.title || "")
+                    .toLowerCase();
+
+
+            let status =
+                task.status ||
+                "Pending";
+
+
+            return (
+
+                title.includes(query)
+
+                &&
+
+                (
+                    filter === ""
+                    ||
+                    status === filter
+                )
+
+            );
+
+        });
+
+
+    if (filteredTasks.length === 0) {
+
+        list.className = "";
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    📋
+                </div>
+
+                <h3>
+                    No tasks found
+                </h3>
+
+                <p>
+                    Add a new task or change your search/filter.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.className = "task-grid";
+
+
+    filteredTasks.forEach(function(item) {
+
+        let task =
+            item.task;
+
+
+        let realIndex =
+            item.index;
+
+
+        let status =
+            task.status ||
+            "Pending";
+
+
+        let statusClass =
+            getStatusClass(status);
+
+
+        list.innerHTML += `
+
+            <div class="task-card ${statusClass}">
+
+                <div class="task-title">
+
+                    ${escapeHTML(task.title)}
+
+                </div>
+
+
+                <div class="status ${statusClass}">
+
+                    ${escapeHTML(status)}
+
+                </div>
+
+
+                <div class="task-actions">
+
+                    <button
+                        class="edit"
+                        onclick="editTask(${realIndex})">
+
+                        ✏️ Edit
+
+                    </button>
+
+
+                    <button
+                        class="delete"
+                        onclick="deleteTask(${realIndex})">
+
+                        🗑️ Delete
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+
+/* =====================================================
+   UPDATE STATISTICS
+===================================================== */
+
+function updateStats() {
+
+    let tasks = getTasks();
+
+
+    let pending = 0;
+
+    let progress = 0;
+
+    let completed = 0;
+
+
+    tasks.forEach(function(task) {
+
+        let status =
+            task.status ||
+            "Pending";
+
+
+        if (status === "Pending") {
+
+            pending++;
+
+        }
+
+        else if (status === "In Progress") {
+
+            progress++;
+
+        }
+
+        else if (status === "Completed") {
+
+            completed++;
+
+        }
+
+    });
+
+
+    document
+        .getElementById("totalTasks")
+        .innerText =
+            tasks.length;
+
+
+    document
+        .getElementById("pendingTasks")
+        .innerText =
+            pending;
+
+
+    document
+        .getElementById("progressTasks")
+        .innerText =
+            progress;
+
+
+    document
+        .getElementById("completedTasks")
+        .innerText =
+            completed;
+
+}
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+displayTasks();
+
+updateStats();
+
+
+</script>
+
+</body>
+</html>

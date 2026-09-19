@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Events - Sagar Central</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            color: #243b53;
+            transition: 0.3s;
+        }
+
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            position: fixed;
+            background: #102a43;
+            color: white;
+            padding: 25px 15px;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h2 {
+            font-size: 23px;
+        }
+
+        .logo p {
+            font-size: 12px;
+            color: #bcccdc;
+            margin-top: 5px;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu li {
+            margin: 7px 0;
+        }
+
+        .menu a {
+            display: block;
+            padding: 12px 14px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            background: #1976d2;
+        }
+
+        .main {
+            margin-left: 240px;
+            width: calc(100% - 240px);
+            padding: 30px;
+        }
+
+        .box {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+            margin-bottom: 20px;
+        }
+
+        h1,
+        h2 {
+            color: #102a43;
+        }
+
+        h2 {
+            margin: 20px 0 15px;
+        }
+
+        input {
+            padding: 12px;
+            border: 1px solid #bcccdc;
+            border-radius: 8px;
+            margin: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 16px;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            background: #1976d2;
+            margin: 3px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .edit {
+            background: #fb8c00;
+        }
+
+        .delete {
+            background: #e53935;
+        }
+
+        .cancel {
+            background: #78909c;
+        }
+
+        .search {
+            width: 100%;
+            margin: 0;
+        }
+
+        .event-card {
+            background: white;
+            padding: 18px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, .07);
+        }
+
+        .event-title {
+            font-weight: bold;
+            font-size: 17px;
+            color: #102a43;
+            margin-bottom: 5px;
+        }
+
+        .event-info {
+            color: #627d98;
+            margin: 8px 0 12px;
+        }
+
+        #message {
+            color: #1976d2;
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        #eventList {
+            list-style: none;
+        }
+
+        .empty {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            color: #627d98;
+        }
+
+        /* DARK MODE */
+        body.dark-mode {
+            background: #121212;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .box,
+        body.dark-mode .event-card,
+        body.dark-mode .empty {
+            background: #1e1e1e;
+            color: #e0e0e0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .4);
+        }
+
+        body.dark-mode h1,
+        body.dark-mode h2,
+        body.dark-mode .event-title {
+            color: #ffffff;
+        }
+
+        body.dark-mode .event-info {
+            color: #b0bec5;
+        }
+
+        body.dark-mode input {
+            background: #2b2b2b;
+            color: white;
+            border-color: #555;
+        }
+
+        body.dark-mode input::placeholder {
+            color: #aaa;
+        }
+
+        body.dark-mode .empty {
+            color: #b0bec5;
+        }
+
+        @media (max-width: 650px) {
+
+            .sidebar {
+                width: 190px;
+            }
+
+            .main {
+                margin-left: 190px;
+                width: calc(100% - 190px);
+                padding: 15px;
+            }
+
+            input {
+                width: 100%;
+                margin: 5px 0;
+            }
+
+            button {
+                margin-top: 5px;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            .sidebar {
+                width: 70px;
+                padding: 20px 8px;
+            }
+
+            .logo h2 {
+                font-size: 0;
+            }
+
+            .logo h2::before {
+                content: "SC";
+                font-size: 20px;
+            }
+
+            .logo p {
+                display: none;
+            }
+
+            .menu a {
+                font-size: 0;
+                text-align: center;
+                padding: 13px 5px;
+            }
+
+            .menu a::first-letter {
+                font-size: 20px;
+            }
+
+            .main {
+                margin-left: 70px;
+                width: calc(100% - 70px);
+                padding: 12px;
+            }
+
+            .box {
+                padding: 16px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+    <div class="logo">
+        <h2>Sagar Central</h2>
+        <p>Enterprise Management System</p>
+    </div>
+
+    <ul class="menu">
+        <li><a href="index.html">🏠 Dashboard</a></li>
+        <li><a href="meetings.html">📅 Meetings</a></li>
+        <li><a href="events.html" class="active">🎉 Events</a></li>
+        <li><a href="policies.html">📜 Policies</a></li>
+        <li><a href="tasks.html">✅ Tasks</a></li>
+        <li><a href="documents.html">📄 Documents</a></li>
+        <li><a href="ai-assistant.html">🤖 AI Assistant</a></li>
+        <li><a href="settings.html">⚙️ Settings</a></li>
+    </ul>
+
+</aside>
+
+<main class="main">
+
+    <div class="box">
+        <h1>🎉 Events</h1>
+    </div>
+
+    <div class="box">
+
+        <h2 id="formTitle">Add New Event</h2>
+
+        <input
+            type="text"
+            id="eventTitle"
+            placeholder="Event title"
+        >
+
+        <input
+            type="date"
+            id="eventDate"
+        >
+
+        <br><br>
+
+        <button onclick="saveEvent()" id="saveButton">
+            Add Event
+        </button>
+
+        <button
+            onclick="cancelEdit()"
+            id="cancelButton"
+            class="cancel"
+            style="display:none;"
+        >
+            Cancel
+        </button>
+
+        <p id="message"></p>
+
+    </div>
+
+    <div class="box">
+
+        <h2>Event Records</h2>
+
+        <input
+            class="search"
+            type="text"
+            id="searchEvent"
+            placeholder="🔍 Search events..."
+            oninput="displayEvents()"
+        >
+
+        <br>
+
+        <input
+            type="date"
+            id="filterDate"
+            onchange="displayEvents()"
+        >
+
+    </div>
+
+    <ul id="eventList"></ul>
+
+</main>
+
+<script>
+
+let editIndex = -1;
+
+
+/* GET EVENTS */
+
+function getEvents() {
+
+    try {
+        return JSON.parse(localStorage.getItem("events")) || [];
+    } catch (error) {
+        return [];
+    }
+}
+
+
+/* ESCAPE HTML */
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* SAVE EVENT */
+
+function saveEvent() {
+
+    let title =
+        document.getElementById("eventTitle").value.trim();
+
+    let date =
+        document.getElementById("eventDate").value;
+
+    let message =
+        document.getElementById("message");
+
+    if (title === "") {
+
+        message.innerText =
+            "Please enter an event title.";
+
+        return;
+    }
+
+    let events = getEvents();
+
+    let event = {
+        title: title,
+        date: date
+    };
+
+    if (editIndex === -1) {
+
+        events.push(event);
+
+        message.innerText =
+            "Event added successfully!";
+
+    } else {
+
+        events[editIndex] = event;
+
+        message.innerText =
+            "Event updated successfully!";
+
+        editIndex = -1;
+    }
+
+    localStorage.setItem(
+        "events",
+        JSON.stringify(events)
+    );
+
+    clearForm();
+    resetButton();
+    displayEvents();
+}
+
+
+/* EDIT EVENT */
+
+function editEvent(index) {
+
+    let events = getEvents();
+
+    if (!events[index]) {
+        return;
+    }
+
+    let event = events[index];
+
+    document.getElementById("eventTitle").value =
+        event.title || "";
+
+    document.getElementById("eventDate").value =
+        event.date || "";
+
+    editIndex = index;
+
+    document.getElementById("formTitle").innerText =
+        "Edit Event";
+
+    document.getElementById("saveButton").innerText =
+        "Update Event";
+
+    document.getElementById("cancelButton").style.display =
+        "inline-block";
+
+    document.getElementById("message").innerText = "";
+
+    window.scrollTo(0, 0);
+}
+
+
+/* DELETE EVENT */
+
+function deleteEvent(index) {
+
+    if (!confirm("Delete this event?")) {
+        return;
+    }
+
+    let events = getEvents();
+
+    if (!events[index]) {
+        return;
+    }
+
+    events.splice(index, 1);
+
+    localStorage.setItem(
+        "events",
+        JSON.stringify(events)
+    );
+
+    if (editIndex === index) {
+        cancelEdit();
+    }
+
+    displayEvents();
+
+    document.getElementById("message").innerText =
+        "Event deleted successfully!";
+}
+
+
+/* CLEAR FORM */
+
+function clearForm() {
+
+    document.getElementById("eventTitle").value = "";
+    document.getElementById("eventDate").value = "";
+}
+
+
+/* CANCEL EDIT */
+
+function cancelEdit() {
+
+    editIndex = -1;
+
+    clearForm();
+    resetButton();
+
+    document.getElementById("message").innerText = "";
+}
+
+
+/* RESET BUTTON */
+
+function resetButton() {
+
+    document.getElementById("formTitle").innerText =
+        "Add New Event";
+
+    document.getElementById("saveButton").innerText =
+        "Add Event";
+
+    document.getElementById("cancelButton").style.display =
+        "none";
+}
+
+
+/* DISPLAY EVENTS */
+
+function displayEvents() {
+
+    let events = getEvents();
+
+    let query =
+        document.getElementById("searchEvent")
+            .value
+            .trim()
+            .toLowerCase();
+
+    let filterDate =
+        document.getElementById("filterDate").value;
+
+    let list =
+        document.getElementById("eventList");
+
+    list.innerHTML = "";
+
+    let filtered = events.filter(function(event) {
+
+        let title =
+            String(event.title || "").toLowerCase();
+
+        return title.includes(query) &&
+            (
+                filterDate === "" ||
+                event.date === filterDate
+            );
+    });
+
+
+    if (filtered.length === 0) {
+
+        list.innerHTML =
+            '<li class="empty">No events found.</li>';
+
+        return;
+    }
+
+
+    filtered.forEach(function(event) {
+
+        let realIndex =
+            events.indexOf(event);
+
+        let li =
+            document.createElement("li");
+
+        li.className =
+            "event-card";
+
+        li.innerHTML = `
+            <div class="event-title">
+                ${escapeHTML(event.title || "Untitled Event")}
+            </div>
+
+            <div class="event-info">
+                📅 ${escapeHTML(event.date || "No date")}
+            </div>
+
+            <button
+                class="edit"
+                onclick="editEvent(${realIndex})">
+                ✏️ Edit
+            </button>
+
+            <button
+                class="delete"
+                onclick="deleteEvent(${realIndex})">
+                🗑️ Delete
+            </button>
+        `;
+
+        list.appendChild(li);
+    });
+}
+
+
+/* APPLY SAVED THEME */
+
+function applyTheme() {
+
+    let theme =
+        localStorage.getItem("theme");
+
+    if (theme === "dark") {
+        document.body.classList.add("dark-mode");
+    } else {
+        document.body.classList.remove("dark-mode");
+    }
+}
+
+
+/* START */
+
+applyTheme();
+displayEvents();
+
+</script>
+
+</body>
+</html>

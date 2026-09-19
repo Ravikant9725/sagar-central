@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Documents - Sagar Central</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            color: #243b53;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #102a43;
+            color: white;
+            padding: 25px 15px;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h2 {
+            font-size: 23px;
+        }
+
+        .logo p {
+            font-size: 12px;
+            color: #bcccdc;
+            margin-top: 5px;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu li {
+            margin: 7px 0;
+        }
+
+        .menu a {
+            display: block;
+            padding: 12px 14px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: .2s;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            background: #1976d2;
+        }
+
+        /* ================= MAIN ================= */
+
+        .main {
+            margin-left: 240px;
+            width: calc(100% - 240px);
+            padding: 30px;
+        }
+
+        /* ================= HEADER ================= */
+
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #102a43;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #627d98;
+        }
+
+        /* ================= STATS ================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.07);
+            border-left: 4px solid #1976d2;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #102a43;
+        }
+
+        .stat-label {
+            margin-top: 5px;
+            color: #627d98;
+            font-size: 13px;
+        }
+
+        /* ================= FORM ================= */
+
+        .form-card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            margin-bottom: 20px;
+        }
+
+        .form-card h2 {
+            margin-bottom: 18px;
+            color: #102a43;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #334e68;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #bcccdc;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #1976d2;
+            box-shadow: 0 0 0 3px rgba(25,118,210,.1);
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            background: #f8fafc;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 18px;
+            cursor: pointer;
+            font-weight: bold;
+            background: #1976d2;
+            color: white;
+        }
+
+        button:hover {
+            opacity: .9;
+        }
+
+        .cancel-btn {
+            background: #829ab1;
+        }
+
+        /* ================= SEARCH ================= */
+
+        .search-box {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            max-width: 500px;
+        }
+
+        /* ================= DOCUMENT GRID ================= */
+
+        .document-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .document-card {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            border-top: 4px solid #1976d2;
+        }
+
+        .document-card h3 {
+            color: #102a43;
+            margin-bottom: 8px;
+            word-break: break-word;
+        }
+
+        .document-description {
+            color: #627d98;
+            line-height: 1.5;
+            font-size: 14px;
+            margin-bottom: 15px;
+            word-break: break-word;
+        }
+
+        .file-info {
+            background: #f8fafc;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            color: #486581;
+            word-break: break-word;
+        }
+
+        .file-info strong {
+            color: #243b53;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .edit-btn {
+            background: #1976d2;
+        }
+
+        .delete-btn {
+            background: #e53935;
+        }
+
+        .download-btn {
+            background: #2e7d32;
+        }
+
+        .empty {
+            background: white;
+            padding: 40px;
+            border-radius: 14px;
+            text-align: center;
+            color: #627d98;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            grid-column: 1 / -1;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media(max-width: 1100px) {
+
+            .document-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media(max-width: 900px) {
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media(max-width: 700px) {
+
+            .sidebar {
+                width: 190px;
+            }
+
+            .main {
+                margin-left: 190px;
+                width: calc(100% - 190px);
+                padding: 15px;
+            }
+
+            .document-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media(max-width: 480px) {
+
+            .sidebar {
+                width: 70px;
+                padding: 15px 8px;
+            }
+
+            .logo h2 {
+                font-size: 0;
+            }
+
+            .logo h2::after {
+                content: "SC";
+                font-size: 20px;
+            }
+
+            .logo p {
+                display: none;
+            }
+
+            .menu a {
+                font-size: 0;
+                text-align: center;
+            }
+
+            .menu a::first-letter {
+                font-size: 20px;
+            }
+
+            .main {
+                margin-left: 70px;
+                width: calc(100% - 70px);
+                padding: 12px;
+            }
+
+            .header,
+            .form-card,
+            .search-box {
+                padding: 18px;
+            }
+
+            .form-buttons {
+                flex-direction: column;
+            }
+
+            .form-buttons button {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+
+        <h2>Sagar Central</h2>
+
+        <p>
+            Enterprise Management System
+        </p>
+
+    </div>
+
+    <ul class="menu">
+
+        <li>
+            <a href="index.html">
+                🏠 Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a href="meetings.html">
+                📅 Meetings
+            </a>
+        </li>
+
+        <li>
+            <a href="events.html">
+                🎉 Events
+            </a>
+        </li>
+
+        <li>
+            <a href="policies.html">
+                📜 Policies
+            </a>
+        </li>
+
+        <li>
+            <a href="tasks.html">
+                ✅ Tasks
+            </a>
+        </li>
+
+        <li>
+            <a href="documents.html" class="active">
+                📄 Documents
+            </a>
+        </li>
+
+        <li>
+            <a href="ai-assistant.html">
+                🤖 AI Assistant
+            </a>
+        </li>
+
+        <li>
+            <a href="settings.html">
+                ⚙️ Settings
+            </a>
+        </li>
+
+    </ul>
+
+</aside>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+    <div class="header">
+
+        <h1>
+            📄 Documents
+        </h1>
+
+        <p>
+            Manage important documents and files in your Sagar Central system.
+        </p>
+
+    </div>
+
+
+    <!-- ================= STATS ================= -->
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <div class="stat-number" id="totalDocuments">
+                0
+            </div>
+
+            <div class="stat-label">
+                Total Documents
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-number" id="documentsWithFiles">
+                0
+            </div>
+
+            <div class="stat-label">
+                Documents With Files
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-number" id="documentsWithoutFiles">
+                0
+            </div>
+
+            <div class="stat-label">
+                Documents Without Files
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= FORM ================= -->
+
+    <div class="form-card">
+
+        <h2 id="formTitle">
+            Add Document
+        </h2>
+
+
+        <div class="form-group">
+
+            <label for="title">
+                Document Title
+            </label>
+
+            <input
+                type="text"
+                id="title"
+                placeholder="Enter document title"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="description">
+                Description
+            </label>
+
+            <textarea
+                id="description"
+                placeholder="Enter document description"
+            ></textarea>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="file">
+                Upload File
+            </label>
+
+            <input
+                type="file"
+                id="file"
+            >
+
+        </div>
+
+
+        <div class="form-buttons">
+
+            <button onclick="saveDocument()">
+                Save Document
+            </button>
+
+            <button
+                class="cancel-btn"
+                id="cancelButton"
+                onclick="cancelEdit()"
+                style="display:none;"
+            >
+                Cancel
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= SEARCH ================= -->
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            id="search"
+            placeholder="🔎 Search documents..."
+            oninput="displayDocuments()"
+        >
+
+    </div>
+
+
+    <!-- ================= DOCUMENTS ================= -->
+
+    <div
+        class="document-grid"
+        id="documentList"
+    ></div>
+
+</main>
+
+
+<script>
+
+/* =====================================================
+   DATA
+===================================================== */
+
+let documents =
+    JSON.parse(
+        localStorage.getItem("documents")
+    ) || [];
+
+
+let editIndex = -1;
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =====================================================
+   SAVE DATA
+===================================================== */
+
+function saveData() {
+
+    localStorage.setItem(
+        "documents",
+        JSON.stringify(documents)
+    );
+
+}
+
+
+/* =====================================================
+   UPDATE STATS
+===================================================== */
+
+function updateStats() {
+
+    const total =
+        documents.length;
+
+    const withFiles =
+        documents.filter(function(document) {
+
+            return document.fileData;
+
+        }).length;
+
+    const withoutFiles =
+        total - withFiles;
+
+
+    document.getElementById("totalDocuments")
+        .innerText = total;
+
+    document.getElementById("documentsWithFiles")
+        .innerText = withFiles;
+
+    document.getElementById("documentsWithoutFiles")
+        .innerText = withoutFiles;
+
+}
+
+
+/* =====================================================
+   SAVE DOCUMENT
+===================================================== */
+
+function saveDocument() {
+
+    const title =
+        document.getElementById("title")
+            .value
+            .trim();
+
+    const description =
+        document.getElementById("description")
+            .value
+            .trim();
+
+    const fileInput =
+        document.getElementById("file");
+
+    const file =
+        fileInput.files[0];
+
+
+    if (title === "") {
+
+        alert("Please enter a document title.");
+
+        return;
+
+    }
+
+
+    /* =================================================
+       ADD NEW DOCUMENT
+    ================================================= */
+
+    if (editIndex === -1) {
+
+        if (file) {
+
+            if (file.size > 1024 * 1024) {
+
+                alert(
+                    "File size must be less than 1 MB."
+                );
+
+                return;
+
+            }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload = function() {
+
+                documents.push({
+
+                    title: title,
+
+                    description: description,
+
+                    fileName: file.name,
+
+                    fileType: file.type,
+
+                    fileData: reader.result
+
+                });
+
+
+                saveData();
+
+                clearForm();
+
+                displayDocuments();
+
+                updateStats();
+
+                alert(
+                    "Document added successfully!"
+                );
+
+            };
+
+
+            reader.readAsDataURL(file);
+
+        } else {
+
+            documents.push({
+
+                title: title,
+
+                description: description,
+
+                fileName: "",
+
+                fileType: "",
+
+                fileData: ""
+
+            });
+
+
+            saveData();
+
+            clearForm();
+
+            displayDocuments();
+
+            updateStats();
+
+            alert(
+                "Document added successfully!"
+            );
+
+        }
+
+
+        return;
+
+    }
+
+
+    /* =================================================
+       EDIT EXISTING DOCUMENT
+    ================================================= */
+
+    const currentIndex =
+        editIndex;
+
+    const existingDocument =
+        documents[currentIndex];
+
+
+    if (!existingDocument) {
+
+        alert(
+            "The document could not be found."
+        );
+
+        cancelEdit();
+
+        return;
+
+    }
+
+
+    /*
+       If no new file was selected,
+       keep the old file.
+    */
+
+    if (!file) {
+
+        existingDocument.title =
+            title;
+
+        existingDocument.description =
+            description;
+
+        saveData();
+
+        clearForm();
+
+        displayDocuments();
+
+        updateStats();
+
+        alert(
+            "Document updated successfully!"
+        );
+
+        return;
+
+    }
+
+
+    /* =================================================
+       NEW FILE DURING EDIT
+    ================================================= */
+
+    if (file.size > 1024 * 1024) {
+
+        alert(
+            "File size must be less than 1 MB."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       IMPORTANT FIX:
+       Capture currentIndex before FileReader.
+       Do NOT use editIndex inside the callback.
+    */
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload = function() {
+
+        /*
+           Make sure the document still exists.
+        */
+
+        if (!documents[currentIndex]) {
+
+            alert(
+                "The document could not be updated."
+            );
+
+            return;
+
+        }
+
+
+        documents[currentIndex] = {
+
+            ...documents[currentIndex],
+
+            title: title,
+
+            description: description,
+
+            fileName: file.name,
+
+            fileType: file.type,
+
+            fileData: reader.result
+
+        };
+
+
+        saveData();
+
+        clearForm();
+
+        displayDocuments();
+
+        updateStats();
+
+        alert(
+            "Document updated successfully!"
+        );
+
+    };
+
+
+    reader.readAsDataURL(file);
+
+}
+
+
+/* =====================================================
+   DISPLAY DOCUMENTS
+===================================================== */
+
+function displayDocuments() {
+
+    const list =
+        document.getElementById("documentList");
+
+
+    const search =
+        document.getElementById("search")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    const filtered =
+        documents.filter(function(document) {
+
+            return (
+
+                String(document.title || "")
+                    .toLowerCase()
+                    .includes(search)
+
+                ||
+
+                String(document.description || "")
+                    .toLowerCase()
+                    .includes(search)
+
+                ||
+
+                String(document.fileName || "")
+                    .toLowerCase()
+                    .includes(search)
+
+            );
+
+        });
+
+
+    if (filtered.length === 0) {
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <h3>
+                    📄 No documents found
+                </h3>
+
+                <p>
+                    Add a document to get started.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        filtered.map(function(document) {
+
+            const realIndex =
+                documents.indexOf(document);
+
+
+            const title =
+                escapeHTML(
+                    document.title || "Untitled Document"
+                );
+
+
+            const description =
+                escapeHTML(
+                    document.description ||
+                    "No description"
+                );
+
+
+            const fileName =
+                escapeHTML(
+                    document.fileName ||
+                    "No file uploaded"
+                );
+
+
+            let fileSection = "";
+
+
+            if (document.fileData) {
+
+                fileSection = `
+
+                    <div class="file-info">
+
+                        📎 <strong>File:</strong>
+                        ${fileName}
+
+                    </div>
+
+                `;
+
+            } else {
+
+                fileSection = `
+
+                    <div class="file-info">
+
+                        📎 <strong>File:</strong>
+                        No file uploaded
+
+                    </div>
+
+                `;
+
+            }
+
+
+            let downloadButton = "";
+
+
+            if (document.fileData) {
+
+                downloadButton = `
+
+                    <button
+                        class="download-btn"
+                        onclick="downloadDocument(${realIndex})"
+                    >
+                        ⬇️ Download
+                    </button>
+
+                `;
+
+            }
+
+
+            return `
+
+                <div class="document-card">
+
+                    <h3>
+                        📄 ${title}
+                    </h3>
+
+                    <div class="document-description">
+                        ${description}
+                    </div>
+
+                    ${fileSection}
+
+                    <div class="card-actions">
+
+                        <button
+                            class="edit-btn"
+                            onclick="editDocument(${realIndex})"
+                        >
+                            ✏️ Edit
+                        </button>
+
+                        ${downloadButton}
+
+                        <button
+                            class="delete-btn"
+                            onclick="deleteDocument(${realIndex})"
+                        >
+                            🗑️ Delete
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* =====================================================
+   EDIT DOCUMENT
+===================================================== */
+
+function editDocument(index) {
+
+    const document =
+        documents[index];
+
+
+    if (!document) {
+
+        return;
+
+    }
+
+
+    editIndex =
+        index;
+
+
+    document.getElementById("title")
+        .value =
+            document.title || "";
+
+
+    document.getElementById("description")
+        .value =
+            document.description || "";
+
+
+    document.getElementById("file")
+        .value = "";
+
+
+    document.getElementById("formTitle")
+        .innerText =
+            "Edit Document";
+
+
+    document.getElementById("cancelButton")
+        .style.display =
+            "inline-block";
+
+
+    window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
+    });
+
+}
+
+
+/* =====================================================
+   DELETE DOCUMENT
+===================================================== */
+
+function deleteDocument(index) {
+
+    const document =
+        documents[index];
+
+
+    if (!document) {
+
+        return;
+
+    }
+
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to delete this document?"
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    documents.splice(
+        index,
+        1
+    );
+
+
+    saveData();
+
+    displayDocuments();
+
+    updateStats();
+
+
+    if (editIndex === index) {
+
+        cancelEdit();
+
+    }
+
+}
+
+
+/* =====================================================
+   DOWNLOAD DOCUMENT
+===================================================== */
+
+function downloadDocument(index) {
+
+    const document =
+        documents[index];
+
+
+    if (
+        !document ||
+        !document.fileData
+    ) {
+
+        alert(
+            "No file is available for this document."
+        );
+
+        return;
+
+    }
+
+
+    const link =
+        document.createElement("a");
+
+
+    link.href =
+        document.fileData;
+
+
+    link.download =
+        document.fileName ||
+        "document";
+
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+}
+
+
+/* =====================================================
+   CLEAR FORM
+===================================================== */
+
+function clearForm() {
+
+    document.getElementById("title")
+        .value = "";
+
+    document.getElementById("description")
+        .value = "";
+
+    document.getElementById("file")
+        .value = "";
+
+    document.getElementById("formTitle")
+        .innerText =
+            "Add Document";
+
+    document.getElementById("cancelButton")
+        .style.display =
+            "none";
+
+    editIndex =
+        -1;
+
+}
+
+
+/* =====================================================
+   CANCEL EDIT
+===================================================== */
+
+function cancelEdit() {
+
+    clearForm();
+
+}
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+displayDocuments();
+
+updateStats();
+
+</script>
+
+</body>
+
+</html>

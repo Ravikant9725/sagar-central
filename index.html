@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sagar Central - Dashboard</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        :root {
+            --primary: #1976d2;
+            --primary-dark: #125ca8;
+            --dark: #102a43;
+            --background: #f4f6f9;
+            --card: #ffffff;
+            --text: #243b53;
+            --muted: #627d98;
+            --border: #d9e2ec;
+            --success: #2e7d32;
+            --warning: #ef6c00;
+            --danger: #d32f2f;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            background: var(--dark);
+            color: white;
+            padding: 25px 15px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 100;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h2 {
+            font-size: 23px;
+        }
+
+        .logo p {
+            font-size: 12px;
+            color: #bcccdc;
+            margin-top: 5px;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu li {
+            margin: 7px 0;
+        }
+
+        .menu a {
+            display: block;
+            padding: 12px 14px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+        .menu a:hover {
+            background: #174a73;
+        }
+
+        .menu a.active {
+            background: var(--primary);
+        }
+
+        /* ================= MAIN ================= */
+
+        .main {
+            margin-left: 240px;
+            width: calc(100% - 240px);
+            padding: 25px;
+        }
+
+        /* ================= TOP BAR ================= */
+
+        .topbar {
+            background: var(--card);
+            padding: 18px 25px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .topbar h1 {
+            color: var(--text);
+            font-size: 26px;
+        }
+
+        .profile {
+            color: var(--muted);
+            font-weight: bold;
+        }
+
+        /* ================= WELCOME ================= */
+
+        .welcome {
+            background: linear-gradient(
+                135deg,
+                #1976d2,
+                #125ca8
+            );
+
+            color: white;
+            padding: 28px;
+            border-radius: 14px;
+            margin-bottom: 22px;
+            box-shadow: 0 4px 12px rgba(25, 118, 210, 0.2);
+        }
+
+        .welcome h2 {
+            margin-bottom: 8px;
+            font-size: 24px;
+        }
+
+        .welcome p {
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+        /* ================= QUICK ACTIONS ================= */
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .quick-action {
+            background: var(--card);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text);
+            font-weight: bold;
+            border: 1px solid var(--border);
+            transition: 0.2s;
+        }
+
+        .quick-action:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        .quick-action span {
+            display: block;
+            font-size: 22px;
+            margin-bottom: 7px;
+        }
+
+        /* ================= SEARCH ================= */
+
+        .global-search {
+            background: var(--card);
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 22px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .global-search h3 {
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .global-search input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+            background: white;
+        }
+
+        .global-search input:focus {
+            border-color: var(--primary);
+        }
+
+        #searchResults {
+            margin-top: 12px;
+        }
+
+        .search-result {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .search-result:last-child {
+            border-bottom: none;
+        }
+
+        .search-result a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .search-result a:hover {
+            text-decoration: underline;
+        }
+
+        .search-type {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        /* ================= STAT CARDS ================= */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--primary);
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 14px rgba(0,0,0,0.10);
+        }
+
+        .card h3 {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .number {
+            font-size: 31px;
+            font-weight: bold;
+            color: var(--text);
+        }
+
+        /* ================= CONTENT ================= */
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .section {
+            background: var(--card);
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            color: var(--text);
+            margin-bottom: 15px;
+            font-size: 19px;
+        }
+
+        .item {
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        .item strong {
+            color: var(--text);
+            display: block;
+        }
+
+        .item small {
+            display: block;
+            color: var(--muted);
+            margin-top: 6px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-top: 6px;
+        }
+
+        .badge.pending {
+            background: #fff3e0;
+            color: var(--warning);
+        }
+
+        .badge.completed {
+            background: #e8f5e9;
+            color: var(--success);
+        }
+
+        .empty {
+            color: var(--muted);
+            padding: 18px 0;
+            text-align: center;
+        }
+
+        /* ================= FOOTER ================= */
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            padding: 25px 0 10px;
+            font-size: 13px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media(max-width: 1100px) {
+
+            .quick-actions {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+        }
+
+        @media(max-width: 900px) {
+
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media(max-width: 650px) {
+
+            .sidebar {
+                width: 190px;
+            }
+
+            .main {
+                margin-left: 190px;
+                width: calc(100% - 190px);
+                padding: 15px;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .welcome h2 {
+                font-size: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+
+        <h2>Sagar Central</h2>
+
+        <p>
+            Enterprise Management System
+        </p>
+
+    </div>
+
+    <ul class="menu">
+
+        <li>
+            <a href="index.html" class="active">
+                🏠 Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a href="meetings.html">
+                📅 Meetings
+            </a>
+        </li>
+
+        <li>
+            <a href="events.html">
+                🎉 Events
+            </a>
+        </li>
+
+        <li>
+            <a href="policies.html">
+                📜 Policies
+            </a>
+        </li>
+
+        <li>
+            <a href="tasks.html">
+                ✅ Tasks
+            </a>
+        </li>
+
+        <li>
+            <a href="documents.html">
+                📄 Documents
+            </a>
+        </li>
+
+        <li>
+            <a href="ai-assistant.html">
+                🤖 AI Assistant
+            </a>
+        </li>
+
+        <li>
+            <a href="settings.html">
+                ⚙️ Settings
+            </a>
+        </li>
+
+    </ul>
+
+</aside>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+
+    <!-- TOP BAR -->
+
+    <div class="topbar">
+
+        <h1>
+            Dashboard
+        </h1>
+
+        <div class="profile">
+
+            👤
+            <span id="profileName">
+                Admin
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- WELCOME -->
+
+    <div class="welcome">
+
+        <h2>
+            Welcome to Sagar Central 👋
+        </h2>
+
+        <p>
+            Manage meetings, events, policies, tasks and
+            documents from one centralized platform.
+        </p>
+
+    </div>
+
+
+    <!-- QUICK ACTIONS -->
+
+    <div class="quick-actions">
+
+        <a href="meetings.html" class="quick-action">
+            <span>📅</span>
+            Add Meeting
+        </a>
+
+        <a href="events.html" class="quick-action">
+            <span>🎉</span>
+            Add Event
+        </a>
+
+        <a href="policies.html" class="quick-action">
+            <span>📜</span>
+            Add Policy
+        </a>
+
+        <a href="tasks.html" class="quick-action">
+            <span>✅</span>
+            Add Task
+        </a>
+
+        <a href="documents.html" class="quick-action">
+            <span>📄</span>
+            Add Document
+        </a>
+
+    </div>
+
+
+    <!-- GLOBAL SEARCH -->
+
+    <div class="global-search">
+
+        <h3>
+            🔍 Search Your Records
+        </h3>
+
+        <input
+            type="text"
+            id="globalSearch"
+            placeholder="Search meetings, events, policies, tasks or documents..."
+            oninput="globalSearch()"
+        >
+
+        <div id="searchResults"></div>
+
+    </div>
+
+
+    <!-- STATISTICS -->
+
+    <div class="cards">
+
+
+        <div class="card">
+
+            <h3>
+                📅 Total Meetings
+            </h3>
+
+            <div
+                class="number"
+                id="totalMeetings">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                🎉 Total Events
+            </h3>
+
+            <div
+                class="number"
+                id="totalEvents">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                📜 Total Policies
+            </h3>
+
+            <div
+                class="number"
+                id="totalPolicies">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                📆 Upcoming Events
+            </h3>
+
+            <div
+                class="number"
+                id="upcomingEvents">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                ✅ Pending Tasks
+            </h3>
+
+            <div
+                class="number"
+                id="totalTasks">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                📄 Documents
+            </h3>
+
+            <div
+                class="number"
+                id="totalDocuments">
+                0
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- DASHBOARD CONTENT -->
+
+    <div class="content">
+
+
+        <!-- MEETINGS -->
+
+        <section class="section">
+
+            <h2>
+                📅 Upcoming Meetings
+            </h2>
+
+            <div id="upcomingMeetings">
+
+                <div class="empty">
+                    Loading meetings...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- EVENTS -->
+
+        <section class="section">
+
+            <h2>
+                🎉 Upcoming Events
+            </h2>
+
+            <div id="upcomingEventList">
+
+                <div class="empty">
+                    Loading events...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- TASKS -->
+
+        <section class="section">
+
+            <h2>
+                ✅ Pending Tasks
+            </h2>
+
+            <div id="pendingTaskList">
+
+                <div class="empty">
+                    Loading tasks...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RECENT ACTIVITY -->
+
+        <section class="section">
+
+            <h2>
+                🕐 Recent Activity
+            </h2>
+
+            <div id="recentActivity">
+
+                <div class="empty">
+                    Loading activity...
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+
+    <div class="footer">
+
+        Sagar Central • Enterprise Management System
+
+    </div>
+
+
+</main>
+
+
+<script>
+
+/* =====================================================
+   GET DATA FROM LOCAL STORAGE
+===================================================== */
+
+function getData(key) {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem(key)
+        ) || [];
+
+    } catch (error) {
+
+        return [];
+
+    }
+
+}
+
+
+/* =====================================================
+   UPDATE DASHBOARD
+===================================================== */
+
+function updateDashboard() {
+
+    const meetings = getData("meetings");
+    const events = getData("events");
+    const policies = getData("policies");
+    const tasks = getData("tasks");
+    const documents = getData("documents");
+
+
+    /* TOTAL COUNTS */
+
+    document.getElementById("totalMeetings").innerText =
+        meetings.length;
+
+    document.getElementById("totalEvents").innerText =
+        events.length;
+
+    document.getElementById("totalPolicies").innerText =
+        policies.length;
+
+    document.getElementById("totalDocuments").innerText =
+        documents.length;
+
+
+    /* TODAY */
+
+    const today = new Date();
+
+    today.setHours(0, 0, 0, 0);
+
+
+    /* UPCOMING EVENTS */
+
+    const upcomingEvents = events.filter(function(event) {
+
+        if (!event.date) {
+            return false;
+        }
+
+        const date = new Date(event.date);
+
+        date.setHours(0, 0, 0, 0);
+
+        return date >= today;
+
+    });
+
+
+    document.getElementById("upcomingEvents").innerText =
+        upcomingEvents.length;
+
+
+    /* PENDING TASKS */
+
+    const pendingTasks = tasks.filter(function(task) {
+
+        return (task.status || "Pending") !== "Completed";
+
+    });
+
+
+    document.getElementById("totalTasks").innerText =
+        pendingTasks.length;
+
+
+    /* DISPLAY */
+
+    displayUpcomingMeetings(meetings);
+
+    displayUpcomingEvents(upcomingEvents);
+
+    displayPendingTasks(pendingTasks);
+
+    displayRecentActivity();
+
+}
+
+
+/* =====================================================
+   UPCOMING MEETINGS
+===================================================== */
+
+function displayUpcomingMeetings(meetings) {
+
+    const box =
+        document.getElementById("upcomingMeetings");
+
+
+    box.innerHTML = "";
+
+
+    const today = new Date();
+
+    today.setHours(0, 0, 0, 0);
+
+
+    const upcoming = meetings
+        .filter(function(meeting) {
+
+            if (!meeting.date) {
+                return false;
+            }
+
+            const date =
+                new Date(meeting.date);
+
+            date.setHours(0, 0, 0, 0);
+
+            return date >= today;
+
+        })
+        .sort(function(a, b) {
+
+            return new Date(a.date) -
+                   new Date(b.date);
+
+        })
+        .slice(0, 5);
+
+
+    if (upcoming.length === 0) {
+
+        box.innerHTML =
+            '<div class="empty">No upcoming meetings.</div>';
+
+        return;
+
+    }
+
+
+    upcoming.forEach(function(meeting) {
+
+        box.innerHTML += `
+
+            <div class="item">
+
+                <strong>
+                    📅 ${escapeHTML(meeting.title || "Untitled Meeting")}
+                </strong>
+
+                <small>
+                    ${meeting.date || "No date"}
+                    ${meeting.time
+                        ? " • " + escapeHTML(meeting.time)
+                        : ""}
+                </small>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+
+/* =====================================================
+   UPCOMING EVENTS
+===================================================== */
+
+function displayUpcomingEvents(events) {
+
+    const box =
+        document.getElementById("upcomingEventList");
+
+
+    box.innerHTML = "";
+
+
+    const upcoming =
+        [...events]
+        .sort(function(a, b) {
+
+            return new Date(a.date) -
+                   new Date(b.date);
+
+        })
+        .slice(0, 5);
+
+
+    if (upcoming.length === 0) {
+
+        box.innerHTML =
+            '<div class="empty">No upcoming events.</div>';
+
+        return;
+
+    }
+
+
+    upcoming.forEach(function(event) {
+
+        box.innerHTML += `
+
+            <div class="item">
+
+                <strong>
+                    🎉 ${escapeHTML(event.title || "Untitled Event")}
+                </strong>
+
+                <small>
+                    📅 ${event.date || "No date"}
+                </small>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+
+/* =====================================================
+   PENDING TASKS
+===================================================== */
+
+function displayPendingTasks(tasks) {
+
+    const box =
+        document.getElementById("pendingTaskList");
+
+
+    box.innerHTML = "";
+
+
+    if (tasks.length === 0) {
+
+        box.innerHTML =
+            '<div class="empty">No pending tasks 🎉</div>';
+
+        return;
+
+    }
+
+
+    tasks.slice(0, 5).forEach(function(task) {
+
+        const status =
+            task.status || "Pending";
+
+
+        const badgeClass =
+            status === "Completed"
+                ? "completed"
+                : "pending";
+
+
+        box.innerHTML += `
+
+            <div class="item">
+
+                <strong>
+                    ✅ ${escapeHTML(task.title || "Untitled Task")}
+                </strong>
+
+                <span class="badge ${badgeClass}">
+                    ${escapeHTML(status)}
+                </span>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+
+/* =====================================================
+   RECENT ACTIVITY
+===================================================== */
+
+function displayRecentActivity() {
+
+    const box =
+        document.getElementById("recentActivity");
+
+
+    let data = [];
+
+
+    getData("meetings").forEach(function(item) {
+
+        data.push({
+            title: item.title,
+            type: "Meeting"
+        });
+
+    });
+
+
+    getData("events").forEach(function(item) {
+
+        data.push({
+            title: item.title,
+            type: "Event"
+        });
+
+    });
+
+
+    getData("policies").forEach(function(item) {
+
+        data.push({
+            title: item.title,
+            type: "Policy"
+        });
+
+    });
+
+
+    getData("tasks").forEach(function(item) {
+
+        data.push({
+            title: item.title,
+            type: "Task"
+        });
+
+    });
+
+
+    getData("documents").forEach(function(item) {
+
+        data.push({
+            title: item.title,
+            type: "Document"
+        });
+
+    });
+
+
+    box.innerHTML = "";
+
+
+    if (data.length === 0) {
+
+        box.innerHTML =
+            '<div class="empty">No activity yet.</div>';
+
+        return;
+
+    }
+
+
+    data
+        .slice(-5)
+        .reverse()
+        .forEach(function(item) {
+
+            box.innerHTML += `
+
+                <div class="item">
+
+                    <strong>
+                        ${escapeHTML(item.title || "Untitled")}
+                    </strong>
+
+                    <small>
+                        ${escapeHTML(item.type)}
+                    </small>
+
+                </div>
+
+            `;
+
+        });
+
+}
+
+
+/* =====================================================
+   GLOBAL SEARCH
+===================================================== */
+
+function globalSearch() {
+
+    const query =
+        document
+        .getElementById("globalSearch")
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    const results =
+        document.getElementById("searchResults");
+
+
+    results.innerHTML = "";
+
+
+    if (query === "") {
+
+        return;
+
+    }
+
+
+    const sources = [
+
+        {
+            key: "meetings",
+            name: "Meeting",
+            page: "meetings.html"
+        },
+
+        {
+            key: "events",
+            name: "Event",
+            page: "events.html"
+        },
+
+        {
+            key: "policies",
+            name: "Policy",
+            page: "policies.html"
+        },
+
+        {
+            key: "tasks",
+            name: "Task",
+            page: "tasks.html"
+        },
+
+        {
+            key: "documents",
+            name: "Document",
+            page: "documents.html"
+        }
+
+    ];
+
+
+    let found = [];
+
+
+    sources.forEach(function(source) {
+
+        getData(source.key)
+            .forEach(function(item) {
+
+                const text =
+                    JSON.stringify(item)
+                    .toLowerCase();
+
+
+                if (text.includes(query)) {
+
+                    found.push({
+
+                        title:
+                            item.title ||
+                            "Untitled",
+
+                        type:
+                            source.name,
+
+                        page:
+                            source.page
+
+                    });
+
+                }
+
+            });
+
+    });
+
+
+    if (found.length === 0) {
+
+        results.innerHTML =
+            '<div class="empty">No matching records found.</div>';
+
+        return;
+
+    }
+
+
+    found
+        .slice(0, 10)
+        .forEach(function(item) {
+
+            results.innerHTML += `
+
+                <div class="search-result">
+
+                    <a href="${item.page}">
+                        ${escapeHTML(item.title)}
+                    </a>
+
+                    <div class="search-type">
+                        ${escapeHTML(item.type)}
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+}
+
+
+/* =====================================================
+   SECURITY HELPER
+===================================================== */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =====================================================
+   PROFILE NAME
+===================================================== */
+
+document.getElementById("profileName").innerText =
+    localStorage.getItem("profileName") || "Admin";
+
+
+/* =====================================================
+   START DASHBOARD
+===================================================== */
+
+updateDashboard();
+
+</script>
+
+</body>
+
+</html>

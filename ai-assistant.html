@@ -1,0 +1,1733 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Assistant - Sagar Central</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            color: #243b53;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #102a43;
+            color: white;
+            padding: 25px 15px;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h2 {
+            font-size: 23px;
+        }
+
+        .logo p {
+            font-size: 12px;
+            color: #bcccdc;
+            margin-top: 5px;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu li {
+            margin: 7px 0;
+        }
+
+        .menu a {
+            display: block;
+            padding: 12px 14px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: .2s;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            background: #1976d2;
+        }
+
+
+        /* ================= MAIN ================= */
+
+        .main {
+            margin-left: 240px;
+            width: calc(100% - 240px);
+            padding: 30px;
+        }
+
+
+        /* ================= HEADER ================= */
+
+        .header {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #102a43;
+            margin-bottom: 7px;
+        }
+
+        .header p {
+            color: #627d98;
+        }
+
+
+        /* ================= STATS ================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            background: white;
+            padding: 16px;
+            border-radius: 10px;
+            box-shadow: 0 2px 7px rgba(0,0,0,.07);
+            border-left: 4px solid #1976d2;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #102a43;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #627d98;
+            margin-top: 5px;
+        }
+
+
+        /* ================= ASSISTANT ================= */
+
+        .assistant {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+        }
+
+
+        /* ================= ASSISTANT TOP ================= */
+
+        .assistant-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .assistant-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .robot {
+            width: 45px;
+            height: 45px;
+            background: #e3f2fd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .assistant-title h2 {
+            color: #102a43;
+        }
+
+        .assistant-title p {
+            color: #627d98;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+
+        /* ================= SUGGESTIONS ================= */
+
+        .suggestion-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #334e68;
+            margin-bottom: 10px;
+        }
+
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .suggestion {
+            padding: 9px 13px;
+            background: #e3f2fd;
+            color: #1976d2;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .suggestion:hover {
+            background: #1976d2;
+            color: white;
+        }
+
+
+        /* ================= CHAT ================= */
+
+        .chat {
+            height: 430px;
+            overflow-y: auto;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e4e7eb;
+            margin-bottom: 15px;
+        }
+
+        .message-row {
+            display: flex;
+            margin-bottom: 14px;
+        }
+
+        .message-row.user-row {
+            justify-content: flex-end;
+        }
+
+        .message {
+            padding: 13px 15px;
+            border-radius: 12px;
+            max-width: 80%;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .message.ai {
+            background: white;
+            color: #243b53;
+            box-shadow: 0 1px 5px rgba(0,0,0,.08);
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.user {
+            background: #1976d2;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-time {
+            font-size: 10px;
+            color: #829ab1;
+            margin-top: 5px;
+        }
+
+
+        /* ================= TYPING ================= */
+
+        .typing {
+            display: none;
+            background: white;
+            width: 65px;
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 1px 5px rgba(0,0,0,.08);
+            margin-bottom: 12px;
+        }
+
+        .typing span {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            background: #829ab1;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1s infinite;
+        }
+
+        .typing span:nth-child(2) {
+            animation-delay: .15s;
+        }
+
+        .typing span:nth-child(3) {
+            animation-delay: .3s;
+        }
+
+        @keyframes typing {
+
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+
+            30% {
+                transform: translateY(-5px);
+            }
+
+        }
+
+
+        /* ================= INPUT ================= */
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        #question {
+            flex: 1;
+            padding: 13px;
+            border: 1px solid #bcccdc;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        #question:focus {
+            border-color: #1976d2;
+            box-shadow: 0 0 0 2px rgba(25,118,210,.1);
+        }
+
+        .ask {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 13px 22px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .ask:hover {
+            opacity: .9;
+        }
+
+
+        /* ================= CLEAR ================= */
+
+        .bottom-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+        }
+
+        .clear {
+            background: #e53935;
+            color: white;
+            border: none;
+            padding: 9px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .clear:hover {
+            opacity: .9;
+        }
+
+        .assistant-note {
+            color: #829ab1;
+            font-size: 12px;
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media(max-width:1100px) {
+
+            .stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+        }
+
+
+        @media(max-width:800px) {
+
+            .sidebar {
+                width: 190px;
+            }
+
+            .main {
+                margin-left: 190px;
+                width: calc(100% - 190px);
+                padding: 15px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media(max-width:600px) {
+
+            .sidebar {
+                width: 170px;
+                padding: 20px 10px;
+            }
+
+            .main {
+                margin-left: 170px;
+                width: calc(100% - 170px);
+                padding: 12px;
+            }
+
+            .logo h2 {
+                font-size: 18px;
+            }
+
+            .logo p {
+                font-size: 10px;
+            }
+
+            .menu a {
+                font-size: 13px;
+                padding: 10px 8px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .input-area {
+                flex-direction: column;
+            }
+
+            .ask {
+                width: 100%;
+            }
+
+            .message {
+                max-width: 90%;
+            }
+
+            .bottom-actions {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+
+        <h2>Sagar Central</h2>
+
+        <p>
+            Enterprise Management System
+        </p>
+
+    </div>
+
+
+    <ul class="menu">
+
+        <li>
+            <a href="index.html">
+                🏠 Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a href="meetings.html">
+                📅 Meetings
+            </a>
+        </li>
+
+        <li>
+            <a href="events.html">
+                🎉 Events
+            </a>
+        </li>
+
+        <li>
+            <a href="policies.html">
+                📜 Policies
+            </a>
+        </li>
+
+        <li>
+            <a href="tasks.html">
+                ✅ Tasks
+            </a>
+        </li>
+
+        <li>
+            <a href="documents.html">
+                📄 Documents
+            </a>
+        </li>
+
+        <li>
+            <a href="ai-assistant.html"
+               class="active">
+                🤖 AI Assistant
+            </a>
+        </li>
+
+        <li>
+            <a href="settings.html">
+                ⚙️ Settings
+            </a>
+        </li>
+
+    </ul>
+
+</aside>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>
+            🤖 AI Assistant
+        </h1>
+
+        <p>
+            Ask questions and quickly find information from your Sagar Central records.
+        </p>
+
+    </div>
+
+
+    <!-- ================= STATS ================= -->
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <div class="stat-number"
+                 id="meetingCount">
+                0
+            </div>
+
+            <div class="stat-label">
+                Meetings
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-number"
+                 id="eventCount">
+                0
+            </div>
+
+            <div class="stat-label">
+                Events
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-number"
+                 id="policyCount">
+                0
+            </div>
+
+            <div class="stat-label">
+                Policies
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-number"
+                 id="taskCount">
+                0
+            </div>
+
+            <div class="stat-label">
+                Tasks
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-number"
+                 id="documentCount">
+                0
+            </div>
+
+            <div class="stat-label">
+                Documents
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= ASSISTANT ================= -->
+
+    <div class="assistant">
+
+
+        <div class="assistant-top">
+
+            <div class="assistant-title">
+
+                <div class="robot">
+                    🤖
+                </div>
+
+                <div>
+
+                    <h2>
+                        Sagar Central Assistant
+                    </h2>
+
+                    <p>
+                        Ready to help with your records
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SUGGESTIONS -->
+
+        <div class="suggestion-title">
+            Try asking:
+        </div>
+
+
+        <div class="suggestions">
+
+            <button
+                class="suggestion"
+                onclick="askSuggestion('Show my meetings')">
+
+                📅 Show meetings
+
+            </button>
+
+
+            <button
+                class="suggestion"
+                onclick="askSuggestion('Show my events')">
+
+                🎉 Show events
+
+            </button>
+
+
+            <button
+                class="suggestion"
+                onclick="askSuggestion('Show my policies')">
+
+                📜 Show policies
+
+            </button>
+
+
+            <button
+                class="suggestion"
+                onclick="askSuggestion('Show my pending tasks')">
+
+                ✅ Pending tasks
+
+            </button>
+
+
+            <button
+                class="suggestion"
+                onclick="askSuggestion('Show completed tasks')">
+
+                ✔️ Completed tasks
+
+            </button>
+
+
+            <button
+                class="suggestion"
+                onclick="askSuggestion('Show my documents')">
+
+                📄 Show documents
+
+            </button>
+
+
+            <button
+                class="suggestion"
+                onclick="askSuggestion('Give me a summary')">
+
+                📊 System summary
+
+            </button>
+
+
+            <button
+                class="suggestion"
+                onclick="askSuggestion('How many records do I have?')">
+
+                🔢 Record count
+
+            </button>
+
+        </div>
+
+
+        <!-- CHAT -->
+
+        <div class="chat"
+             id="chat">
+
+
+            <div class="message-row">
+
+                <div class="message ai">
+
+                    Hello! 👋
+
+                    <br><br>
+
+                    I can help you find information about your:
+
+                    <br>
+                    📅 Meetings
+                    <br>
+                    🎉 Events
+                    <br>
+                    📜 Policies
+                    <br>
+                    ✅ Tasks
+                    <br>
+                    📄 Documents
+
+                    <br><br>
+
+                    Try asking:
+                    <br>
+                    <b>"Show my pending tasks"</b>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- TYPING -->
+
+        <div class="typing"
+             id="typing">
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </div>
+
+
+        <!-- INPUT -->
+
+        <div class="input-area">
+
+            <input
+                type="text"
+                id="question"
+                placeholder="Ask something about your records..."
+                onkeydown="handleEnter(event)"
+            >
+
+
+            <button
+                class="ask"
+                onclick="askAI()">
+
+                Ask 🤖
+
+            </button>
+
+        </div>
+
+
+        <!-- BOTTOM -->
+
+        <div class="bottom-actions">
+
+            <div class="assistant-note">
+
+                ℹ️ Assistant currently works with your local Sagar Central records.
+
+            </div>
+
+
+            <button
+                class="clear"
+                onclick="clearChat()">
+
+                🗑️ Clear Chat
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+
+</main>
+
+
+<script>
+
+
+/* =====================================================
+   GET DATA
+===================================================== */
+
+function getData(key) {
+
+    return JSON.parse(
+        localStorage.getItem(key)
+    ) || [];
+
+}
+
+
+/* =====================================================
+   UPDATE STATISTICS
+===================================================== */
+
+function updateStats() {
+
+    document
+        .getElementById("meetingCount")
+        .innerText =
+            getData("meetings").length;
+
+
+    document
+        .getElementById("eventCount")
+        .innerText =
+            getData("events").length;
+
+
+    document
+        .getElementById("policyCount")
+        .innerText =
+            getData("policies").length;
+
+
+    document
+        .getElementById("taskCount")
+        .innerText =
+            getData("tasks").length;
+
+
+    document
+        .getElementById("documentCount")
+        .innerText =
+            getData("documents").length;
+
+}
+
+
+/* =====================================================
+   ADD MESSAGE
+===================================================== */
+
+function addMessage(text, type) {
+
+    let chat =
+        document.getElementById("chat");
+
+
+    let row =
+        document.createElement("div");
+
+
+    row.className =
+        "message-row " +
+        (type === "user"
+            ? "user-row"
+            : "");
+
+
+    let message =
+        document.createElement("div");
+
+
+    message.className =
+        "message " + type;
+
+
+    message.innerText =
+        text;
+
+
+    row.appendChild(message);
+
+    chat.appendChild(row);
+
+
+    chat.scrollTop =
+        chat.scrollHeight;
+
+}
+
+
+/* =====================================================
+   SUGGESTION
+===================================================== */
+
+function askSuggestion(text) {
+
+    document
+        .getElementById("question")
+        .value = text;
+
+
+    askAI();
+
+}
+
+
+/* =====================================================
+   ENTER KEY
+===================================================== */
+
+function handleEnter(event) {
+
+    if (
+        event.key === "Enter"
+        &&
+        !event.shiftKey
+    ) {
+
+        event.preventDefault();
+
+        askAI();
+
+    }
+
+}
+
+
+/* =====================================================
+   ASK AI
+===================================================== */
+
+function askAI() {
+
+    let input =
+        document.getElementById("question");
+
+
+    let question =
+        input.value.trim();
+
+
+    if (question === "") {
+
+        return;
+
+    }
+
+
+    addMessage(
+        question,
+        "user"
+    );
+
+
+    input.value = "";
+
+
+    let typing =
+        document.getElementById("typing");
+
+
+    typing.style.display =
+        "block";
+
+
+    let q =
+        question.toLowerCase();
+
+
+    let response =
+        generateAnswer(q);
+
+
+    setTimeout(function() {
+
+        typing.style.display =
+            "none";
+
+
+        addMessage(
+            response,
+            "ai"
+        );
+
+    }, 500);
+
+}
+
+
+/* =====================================================
+   GENERATE ANSWER
+===================================================== */
+
+function generateAnswer(q) {
+
+
+    let meetings =
+        getData("meetings");
+
+
+    let events =
+        getData("events");
+
+
+    let policies =
+        getData("policies");
+
+
+    let tasks =
+        getData("tasks");
+
+
+    let documents =
+        getData("documents");
+
+
+    /* ================= GREETING ================= */
+
+    if (
+        q === "hi"
+        ||
+        q === "hello"
+        ||
+        q.includes("good morning")
+        ||
+        q.includes("good afternoon")
+        ||
+        q.includes("good evening")
+    ) {
+
+        return `
+Hello! 👋
+
+I'm your Sagar Central Assistant.
+
+I can help you find information from meetings, events, policies, tasks and documents.
+
+What would you like to know?
+        `.trim();
+
+    }
+
+
+    /* ================= SUMMARY ================= */
+
+    if (
+        q.includes("summary")
+        ||
+        q.includes("overview")
+        ||
+        q.includes("dashboard")
+    ) {
+
+        let pending =
+            tasks.filter(function(task) {
+
+                return (
+                    task.status ||
+                    "Pending"
+                ) !== "Completed";
+
+            }).length;
+
+
+        let completed =
+            tasks.filter(function(task) {
+
+                return (
+                    task.status ||
+                    "Pending"
+                ) === "Completed";
+
+            }).length;
+
+
+        return `
+📊 Sagar Central Summary
+
+📅 Meetings: ${meetings.length}
+🎉 Events: ${events.length}
+📜 Policies: ${policies.length}
+📄 Documents: ${documents.length}
+
+✅ Tasks: ${tasks.length}
+⏳ Pending/In Progress: ${pending}
+✔️ Completed: ${completed}
+        `.trim();
+
+    }
+
+
+    /* ================= COUNT ================= */
+
+    if (
+        q.includes("how many")
+        ||
+        q.includes("count")
+        ||
+        q.includes("total")
+    ) {
+
+        let results = [];
+
+
+        if (
+            q.includes("meeting")
+            ||
+            q.includes("record")
+        ) {
+
+            results.push(
+                "📅 Meetings: " +
+                meetings.length
+            );
+
+        }
+
+
+        if (
+            q.includes("event")
+            ||
+            q.includes("record")
+        ) {
+
+            results.push(
+                "🎉 Events: " +
+                events.length
+            );
+
+        }
+
+
+        if (
+            q.includes("polic")
+            ||
+            q.includes("record")
+        ) {
+
+            results.push(
+                "📜 Policies: " +
+                policies.length
+            );
+
+        }
+
+
+        if (
+            q.includes("task")
+            ||
+            q.includes("record")
+        ) {
+
+            results.push(
+                "✅ Tasks: " +
+                tasks.length
+            );
+
+        }
+
+
+        if (
+            q.includes("document")
+            ||
+            q.includes("record")
+        ) {
+
+            results.push(
+                "📄 Documents: " +
+                documents.length
+            );
+
+        }
+
+
+        if (results.length > 0) {
+
+            return results.join("\n");
+
+        }
+
+    }
+
+
+    /* ================= MEETINGS ================= */
+
+    if (
+        q.includes("meeting")
+    ) {
+
+        if (meetings.length === 0) {
+
+            return "There are currently no meetings in Sagar Central.";
+
+        }
+
+
+        return (
+            "📅 Your Meetings:\n\n" +
+
+            meetings.map(function(m, i) {
+
+                return (
+                    `${i + 1}. ${m.title}` +
+                    `\n   Date: ${m.date || "No date"}` +
+                    `\n   Time: ${m.time || "No time"}`
+                );
+
+            }).join("\n\n")
+        );
+
+    }
+
+
+    /* ================= EVENTS ================= */
+
+    if (
+        q.includes("event")
+    ) {
+
+        if (events.length === 0) {
+
+            return "There are currently no events in Sagar Central.";
+
+        }
+
+
+        return (
+            "🎉 Your Events:\n\n" +
+
+            events.map(function(e, i) {
+
+                return (
+                    `${i + 1}. ${e.title}` +
+                    `\n   Date: ${e.date || "No date"}`
+                );
+
+            }).join("\n\n")
+        );
+
+    }
+
+
+    /* ================= POLICY ================= */
+
+    if (
+        q.includes("policy")
+        ||
+        q.includes("policies")
+    ) {
+
+        if (policies.length === 0) {
+
+            return "There are currently no policies in Sagar Central.";
+
+        }
+
+
+        return (
+            "📜 Your Policies:\n\n" +
+
+            policies.map(function(p, i) {
+
+                return (
+                    `${i + 1}. ${p.title}` +
+                    `\n   Category: ${p.category || "General"}` +
+                    `\n   ${p.description || "No description"}`
+                );
+
+            }).join("\n\n")
+        );
+
+    }
+
+
+    /* ================= PENDING TASKS ================= */
+
+    if (
+        q.includes("pending")
+        &&
+        q.includes("task")
+    ) {
+
+        let pending =
+            tasks.filter(function(t) {
+
+                return (
+                    t.status ||
+                    "Pending"
+                ) !== "Completed";
+
+            });
+
+
+        if (pending.length === 0) {
+
+            return "🎉 There are no pending tasks.";
+
+        }
+
+
+        return (
+            "⏳ Pending Tasks:\n\n" +
+
+            pending.map(function(t, i) {
+
+                return (
+                    `${i + 1}. ${t.title}` +
+                    `\n   Status: ${t.status || "Pending"}`
+                );
+
+            }).join("\n\n")
+        );
+
+    }
+
+
+    /* ================= COMPLETED TASKS ================= */
+
+    if (
+        q.includes("completed")
+        &&
+        q.includes("task")
+    ) {
+
+        let completed =
+            tasks.filter(function(t) {
+
+                return (
+                    t.status ||
+                    "Pending"
+                ) === "Completed";
+
+            });
+
+
+        if (completed.length === 0) {
+
+            return "There are no completed tasks yet.";
+
+        }
+
+
+        return (
+            "✔️ Completed Tasks:\n\n" +
+
+            completed.map(function(t, i) {
+
+                return (
+                    `${i + 1}. ${t.title}`
+                );
+
+            }).join("\n\n")
+        );
+
+    }
+
+
+    /* ================= ALL TASKS ================= */
+
+    if (
+        q.includes("task")
+    ) {
+
+        if (tasks.length === 0) {
+
+            return "There are currently no tasks.";
+
+        }
+
+
+        return (
+            "✅ Your Tasks:\n\n" +
+
+            tasks.map(function(t, i) {
+
+                return (
+                    `${i + 1}. ${t.title}` +
+                    `\n   Status: ${t.status || "Pending"}`
+                );
+
+            }).join("\n\n")
+        );
+
+    }
+
+
+    /* ================= DOCUMENTS ================= */
+
+    if (
+        q.includes("document")
+        ||
+        q.includes("file")
+    ) {
+
+        if (documents.length === 0) {
+
+            return "There are currently no documents.";
+
+        }
+
+
+        return (
+            "📄 Your Documents:\n\n" +
+
+            documents.map(function(d, i) {
+
+                return (
+                    `${i + 1}. ${d.title}` +
+                    `\n   ${d.description || "No description"}` +
+                    `\n   File: ${d.fileName || "No file uploaded"}`
+                );
+
+            }).join("\n\n")
+        );
+
+    }
+
+
+    /* ================= SEARCH ================= */
+
+    if (
+        q.includes("find")
+        ||
+        q.includes("search")
+    ) {
+
+        let searchWords =
+            q
+                .replace("find", "")
+                .replace("search", "")
+                .trim();
+
+
+        if (searchWords === "") {
+
+            return `
+Tell me what you want me to find.
+
+For example:
+"Find budget policy"
+"Find meeting"
+"Find project document"
+            `.trim();
+
+        }
+
+
+        let results = [];
+
+
+        meetings.forEach(function(m) {
+
+            if (
+                String(m.title)
+                    .toLowerCase()
+                    .includes(searchWords)
+            ) {
+
+                results.push(
+                    "📅 Meeting: " +
+                    m.title
+                );
+
+            }
+
+        });
+
+
+        events.forEach(function(e) {
+
+            if (
+                String(e.title)
+                    .toLowerCase()
+                    .includes(searchWords)
+            ) {
+
+                results.push(
+                    "🎉 Event: " +
+                    e.title
+                );
+
+            }
+
+        });
+
+
+        policies.forEach(function(p) {
+
+            let text =
+                (
+                    p.title +
+                    " " +
+                    (p.description || "")
+                ).toLowerCase();
+
+
+            if (
+                text.includes(searchWords)
+            ) {
+
+                results.push(
+                    "📜 Policy: " +
+                    p.title
+                );
+
+            }
+
+        });
+
+
+        tasks.forEach(function(t) {
+
+            if (
+                String(t.title)
+                    .toLowerCase()
+                    .includes(searchWords)
+            ) {
+
+                results.push(
+                    "✅ Task: " +
+                    t.title
+                );
+
+            }
+
+        });
+
+
+        documents.forEach(function(d) {
+
+            let text =
+                (
+                    d.title +
+                    " " +
+                    (d.description || "") +
+                    " " +
+                    (d.fileName || "")
+                ).toLowerCase();
+
+
+            if (
+                text.includes(searchWords)
+            ) {
+
+                results.push(
+                    "📄 Document: " +
+                    d.title
+                );
+
+            }
+
+        });
+
+
+        if (results.length === 0) {
+
+            return (
+                "I couldn't find any records matching \"" +
+                searchWords +
+                "\"."
+            );
+
+        }
+
+
+        return (
+            "🔎 Search Results:\n\n" +
+            results.join("\n")
+        );
+
+    }
+
+
+    /* ================= HELP ================= */
+
+    if (
+        q.includes("help")
+        ||
+        q.includes("what can you do")
+        ||
+        q.includes("what do you do")
+    ) {
+
+        return `
+🤖 I can currently help you with:
+
+📅 Meetings
+• Show meetings
+• Find meeting information
+
+🎉 Events
+• Show events
+
+📜 Policies
+• Show policies
+• Search policy information
+
+✅ Tasks
+• Show tasks
+• Show pending tasks
+• Show completed tasks
+
+📄 Documents
+• Show documents
+• Find documents
+
+📊 System
+• Give me a summary
+• How many records do I have?
+
+🔎 Search
+• Find a specific record
+        `.trim();
+
+    }
+
+
+    /* ================= DEFAULT ================= */
+
+    return `
+I understand that you're asking about Sagar Central, but I couldn't match that question to a specific record.
+
+Try one of these:
+
+• "Show my meetings"
+• "Show my events"
+• "Show my policies"
+• "Show my pending tasks"
+• "Show completed tasks"
+• "Show my documents"
+• "Give me a summary"
+• "Find budget"
+        `.trim();
+
+}
+
+
+/* =====================================================
+   CLEAR CHAT
+===================================================== */
+
+function clearChat() {
+
+    document
+        .getElementById("chat")
+        .innerHTML = `
+
+        <div class="message-row">
+
+            <div class="message ai">
+
+                Chat cleared. 👋
+
+                <br><br>
+
+                How can I help you with your Sagar Central records?
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+updateStats();
+
+
+</script>
+
+
+</body>
+
+</html>
