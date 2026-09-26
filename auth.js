@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000";
+const API_URL = "https://sagar-central.onrender.com";
 
 async function checkAuthentication() {
     const token = localStorage.getItem("token");
