@@ -1,9 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Events - Sagar Central</title>
 
     <style>
+
         * {
             margin: 0;
             padding: 0;
@@ -163,6 +170,7 @@
         }
 
         /* DARK MODE */
+
         body.dark-mode {
             background: #121212;
             color: #e0e0e0;
@@ -266,7 +274,9 @@
                 font-size: 24px;
             }
         }
+
     </style>
+
 </head>
 
 <body>
@@ -274,32 +284,86 @@
 <aside class="sidebar">
 
     <div class="logo">
+
         <h2>Sagar Central</h2>
-        <p>Enterprise Management System</p>
+
+        <p>
+            Enterprise Management System
+        </p>
+
     </div>
 
     <ul class="menu">
-        <li><a href="index.html">🏠 Dashboard</a></li>
-        <li><a href="meetings.html">📅 Meetings</a></li>
-        <li><a href="events.html" class="active">🎉 Events</a></li>
-        <li><a href="policies.html">📜 Policies</a></li>
-        <li><a href="tasks.html">✅ Tasks</a></li>
-        <li><a href="documents.html">📄 Documents</a></li>
-        <li><a href="ai-assistant.html">🤖 AI Assistant</a></li>
-        <li><a href="settings.html">⚙️ Settings</a></li>
+
+        <li>
+            <a href="index.html">
+                🏠 Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a href="meetings.html">
+                📅 Meetings
+            </a>
+        </li>
+
+        <li>
+            <a href="events.html" class="active">
+                🎉 Events
+            </a>
+        </li>
+
+        <li>
+            <a href="policies.html">
+                📜 Policies
+            </a>
+        </li>
+
+        <li>
+            <a href="tasks.html">
+                ✅ Tasks
+            </a>
+        </li>
+
+        <li>
+            <a href="documents.html">
+                📄 Documents
+            </a>
+        </li>
+
+        <li>
+            <a href="ai-assistant.html">
+                🤖 AI Assistant
+            </a>
+        </li>
+
+        <li>
+            <a href="settings.html">
+                ⚙️ Settings
+            </a>
+        </li>
+
     </ul>
 
 </aside>
 
+
 <main class="main">
 
     <div class="box">
-        <h1>🎉 Events</h1>
+
+        <h1>
+            🎉 Events
+        </h1>
+
     </div>
+
 
     <div class="box">
 
-        <h2 id="formTitle">Add New Event</h2>
+        <h2 id="formTitle">
+            Add New Event
+        </h2>
 
         <input
             type="text"
@@ -314,7 +378,10 @@
 
         <br><br>
 
-        <button onclick="saveEvent()" id="saveButton">
+        <button
+            onclick="saveEvent()"
+            id="saveButton"
+        >
             Add Event
         </button>
 
@@ -331,9 +398,12 @@
 
     </div>
 
+
     <div class="box">
 
-        <h2>Event Records</h2>
+        <h2>
+            Event Records
+        </h2>
 
         <input
             class="search"
@@ -353,301 +423,752 @@
 
     </div>
 
+
     <ul id="eventList"></ul>
 
 </main>
 
+
 <script>
 
-let editIndex = -1;
+const API_URL = "http://localhost:3000";
+
+let events = [];
+
+let editId = null;
+
+let messageTimer;
 
 
-/* GET EVENTS */
+// =====================================
+// API REQUEST
+// =====================================
 
-function getEvents() {
+async function apiRequest(url, options = {}) {
+
+    const token =
+        localStorage.getItem("token");
+
+    if (!token) {
+
+        window.location.href =
+            "login.html";
+
+        return null;
+    }
+
+
+    const response =
+        await fetch(
+            `${API_URL}${url}`,
+            {
+                ...options,
+
+                headers: {
+                    "Content-Type":
+                        "application/json",
+
+                    "Authorization":
+                        `Bearer ${token}`,
+
+                    ...(options.headers || {})
+                }
+            }
+        );
+
+
+    if (response.status === 401) {
+
+        localStorage.removeItem("token");
+
+        localStorage.removeItem("user");
+
+        window.location.href =
+            "login.html";
+
+        return null;
+    }
+
+
+    const data =
+        await response.json();
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            data.message ||
+            "Something went wrong."
+        );
+    }
+
+
+    return data;
+}
+
+
+// =====================================
+// LOAD EVENTS
+// =====================================
+
+async function loadEvents() {
 
     try {
-        return JSON.parse(localStorage.getItem("events")) || [];
-    } catch (error) {
-        return [];
+
+        const data =
+            await apiRequest(
+                "/api/events"
+            );
+
+
+        if (!data) {
+            return;
+        }
+
+
+        events =
+            Array.isArray(data)
+                ? data
+                : [];
+
+
+        displayEvents();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            error.message ||
+            "Unable to load events.",
+            "error"
+        );
     }
 }
 
 
-/* ESCAPE HTML */
+// =====================================
+// SAVE EVENT
+// =====================================
+
+async function saveEvent() {
+
+    const title =
+        document
+            .getElementById("eventTitle")
+            .value
+            .trim();
+
+
+    const date =
+        document
+            .getElementById("eventDate")
+            .value;
+
+
+    if (title === "") {
+
+        showMessage(
+            "Please enter an event title.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const eventData = {
+
+            title: title,
+
+            date: date
+
+        };
+
+
+        // ADD NEW EVENT
+
+        if (editId === null) {
+
+            const newEvent =
+                await apiRequest(
+                    "/api/events",
+                    {
+                        method: "POST",
+
+                        body:
+                            JSON.stringify(
+                                eventData
+                            )
+                    }
+                );
+
+
+            if (!newEvent) {
+                return;
+            }
+
+
+            events.push(newEvent);
+
+
+            showMessage(
+                "Event added successfully!",
+                "success"
+            );
+
+        }
+
+
+        // UPDATE EVENT
+
+        else {
+
+            const updatedEvent =
+                await apiRequest(
+                    `/api/events/${editId}`,
+                    {
+                        method: "PUT",
+
+                        body:
+                            JSON.stringify(
+                                eventData
+                            )
+                    }
+                );
+
+
+            if (!updatedEvent) {
+                return;
+            }
+
+
+            const index =
+                events.findIndex(
+                    event =>
+                        event.id === editId
+                );
+
+
+            if (index !== -1) {
+
+                events[index] =
+                    updatedEvent;
+
+            }
+
+
+            showMessage(
+                "Event updated successfully!",
+                "success"
+            );
+
+        }
+
+
+        clearForm();
+
+        resetButton();
+
+        editId = null;
+
+        displayEvents();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            error.message ||
+            "Unable to save event.",
+            "error"
+        );
+    }
+}
+
+
+// =====================================
+// EDIT EVENT
+// =====================================
+
+function editEvent(id) {
+
+    const event =
+        events.find(
+            item =>
+                item.id === id
+        );
+
+
+    if (!event) {
+        return;
+    }
+
+
+    document
+        .getElementById("eventTitle")
+        .value =
+            event.title || "";
+
+
+    document
+        .getElementById("eventDate")
+        .value =
+            event.date || "";
+
+
+    editId = id;
+
+
+    document
+        .getElementById("formTitle")
+        .innerText =
+            "Edit Event";
+
+
+    document
+        .getElementById("saveButton")
+        .innerText =
+            "Update Event";
+
+
+    document
+        .getElementById("cancelButton")
+        .style.display =
+            "inline-block";
+
+
+    clearMessage();
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+// =====================================
+// DELETE EVENT
+// =====================================
+
+async function deleteEvent(id) {
+
+    const event =
+        events.find(
+            item =>
+                item.id === id
+        );
+
+
+    if (!event) {
+        return;
+    }
+
+
+    if (
+        !confirm(
+            `Delete "${event.title}"?`
+        )
+    ) {
+
+        return;
+    }
+
+
+    try {
+
+        const result =
+            await apiRequest(
+                `/api/events/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        if (!result) {
+            return;
+        }
+
+
+        events =
+            events.filter(
+                item =>
+                    item.id !== id
+            );
+
+
+        if (editId === id) {
+
+            cancelEdit();
+
+        }
+
+
+        displayEvents();
+
+
+        showMessage(
+            "Event deleted successfully!",
+            "success"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            error.message ||
+            "Unable to delete event.",
+            "error"
+        );
+    }
+}
+
+
+// =====================================
+// CLEAR FORM
+// =====================================
+
+function clearForm() {
+
+    document
+        .getElementById("eventTitle")
+        .value = "";
+
+
+    document
+        .getElementById("eventDate")
+        .value = "";
+}
+
+
+// =====================================
+// CANCEL EDIT
+// =====================================
+
+function cancelEdit() {
+
+    editId = null;
+
+    clearForm();
+
+    resetButton();
+
+    clearMessage();
+}
+
+
+// =====================================
+// RESET BUTTON
+// =====================================
+
+function resetButton() {
+
+    document
+        .getElementById("formTitle")
+        .innerText =
+            "Add New Event";
+
+
+    document
+        .getElementById("saveButton")
+        .innerText =
+            "Add Event";
+
+
+    document
+        .getElementById("cancelButton")
+        .style.display =
+            "none";
+}
+
+
+// =====================================
+// MESSAGE
+// =====================================
+
+function showMessage(
+    message,
+    type
+) {
+
+    const element =
+        document.getElementById(
+            "message"
+        );
+
+
+    clearTimeout(messageTimer);
+
+
+    element.innerText =
+        message;
+
+
+    if (type === "success") {
+
+        element.style.color =
+            "#2e7d32";
+
+    }
+
+    else {
+
+        element.style.color =
+            "#e53935";
+
+    }
+
+
+    messageTimer =
+        setTimeout(
+            function() {
+
+                element.innerText = "";
+
+            },
+            3000
+        );
+}
+
+
+function clearMessage() {
+
+    document
+        .getElementById("message")
+        .innerText = "";
+}
+
+
+// =====================================
+// ESCAPE HTML
+// =====================================
 
 function escapeHTML(value) {
 
     return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 }
 
 
-/* SAVE EVENT */
-
-function saveEvent() {
-
-    let title =
-        document.getElementById("eventTitle").value.trim();
-
-    let date =
-        document.getElementById("eventDate").value;
-
-    let message =
-        document.getElementById("message");
-
-    if (title === "") {
-
-        message.innerText =
-            "Please enter an event title.";
-
-        return;
-    }
-
-    let events = getEvents();
-
-    let event = {
-        title: title,
-        date: date
-    };
-
-    if (editIndex === -1) {
-
-        events.push(event);
-
-        message.innerText =
-            "Event added successfully!";
-
-    } else {
-
-        events[editIndex] = event;
-
-        message.innerText =
-            "Event updated successfully!";
-
-        editIndex = -1;
-    }
-
-    localStorage.setItem(
-        "events",
-        JSON.stringify(events)
-    );
-
-    clearForm();
-    resetButton();
-    displayEvents();
-}
-
-
-/* EDIT EVENT */
-
-function editEvent(index) {
-
-    let events = getEvents();
-
-    if (!events[index]) {
-        return;
-    }
-
-    let event = events[index];
-
-    document.getElementById("eventTitle").value =
-        event.title || "";
-
-    document.getElementById("eventDate").value =
-        event.date || "";
-
-    editIndex = index;
-
-    document.getElementById("formTitle").innerText =
-        "Edit Event";
-
-    document.getElementById("saveButton").innerText =
-        "Update Event";
-
-    document.getElementById("cancelButton").style.display =
-        "inline-block";
-
-    document.getElementById("message").innerText = "";
-
-    window.scrollTo(0, 0);
-}
-
-
-/* DELETE EVENT */
-
-function deleteEvent(index) {
-
-    if (!confirm("Delete this event?")) {
-        return;
-    }
-
-    let events = getEvents();
-
-    if (!events[index]) {
-        return;
-    }
-
-    events.splice(index, 1);
-
-    localStorage.setItem(
-        "events",
-        JSON.stringify(events)
-    );
-
-    if (editIndex === index) {
-        cancelEdit();
-    }
-
-    displayEvents();
-
-    document.getElementById("message").innerText =
-        "Event deleted successfully!";
-}
-
-
-/* CLEAR FORM */
-
-function clearForm() {
-
-    document.getElementById("eventTitle").value = "";
-    document.getElementById("eventDate").value = "";
-}
-
-
-/* CANCEL EDIT */
-
-function cancelEdit() {
-
-    editIndex = -1;
-
-    clearForm();
-    resetButton();
-
-    document.getElementById("message").innerText = "";
-}
-
-
-/* RESET BUTTON */
-
-function resetButton() {
-
-    document.getElementById("formTitle").innerText =
-        "Add New Event";
-
-    document.getElementById("saveButton").innerText =
-        "Add Event";
-
-    document.getElementById("cancelButton").style.display =
-        "none";
-}
-
-
-/* DISPLAY EVENTS */
+// =====================================
+// DISPLAY EVENTS
+// =====================================
 
 function displayEvents() {
 
-    let events = getEvents();
-
-    let query =
-        document.getElementById("searchEvent")
+    const query =
+        document
+            .getElementById(
+                "searchEvent"
+            )
             .value
             .trim()
             .toLowerCase();
 
-    let filterDate =
-        document.getElementById("filterDate").value;
 
-    let list =
-        document.getElementById("eventList");
+    const filterDate =
+        document
+            .getElementById(
+                "filterDate"
+            )
+            .value;
+
+
+    const list =
+        document.getElementById(
+            "eventList"
+        );
+
 
     list.innerHTML = "";
 
-    let filtered = events.filter(function(event) {
 
-        let title =
-            String(event.title || "").toLowerCase();
+    const filtered =
+        events.filter(
+            function(event) {
 
-        return title.includes(query) &&
-            (
-                filterDate === "" ||
-                event.date === filterDate
-            );
-    });
+                const title =
+                    String(
+                        event.title || ""
+                    ).toLowerCase();
 
 
-    if (filtered.length === 0) {
+                const matchesSearch =
+                    title.includes(
+                        query
+                    );
 
-        list.innerHTML =
-            '<li class="empty">No events found.</li>';
+
+                const matchesDate =
+                    filterDate === "" ||
+                    event.date === filterDate;
+
+
+                return (
+                    matchesSearch &&
+                    matchesDate
+                );
+            }
+        );
+
+
+    if (
+        filtered.length === 0
+    ) {
+
+        list.innerHTML = `
+
+            <li class="empty">
+
+                No events found.
+
+            </li>
+
+        `;
 
         return;
     }
 
 
-    filtered.forEach(function(event) {
+    filtered.forEach(
+        function(event) {
 
-        let realIndex =
-            events.indexOf(event);
+            const li =
+                document.createElement(
+                    "li"
+                );
 
-        let li =
-            document.createElement("li");
 
-        li.className =
-            "event-card";
+            li.className =
+                "event-card";
 
-        li.innerHTML = `
-            <div class="event-title">
-                ${escapeHTML(event.title || "Untitled Event")}
-            </div>
 
-            <div class="event-info">
-                📅 ${escapeHTML(event.date || "No date")}
-            </div>
+            li.innerHTML = `
 
-            <button
-                class="edit"
-                onclick="editEvent(${realIndex})">
-                ✏️ Edit
-            </button>
+                <div class="event-title">
 
-            <button
-                class="delete"
-                onclick="deleteEvent(${realIndex})">
-                🗑️ Delete
-            </button>
-        `;
+                    ${escapeHTML(
+                        event.title ||
+                        "Untitled Event"
+                    )}
 
-        list.appendChild(li);
-    });
+                </div>
+
+
+                <div class="event-info">
+
+                    📅
+                    ${escapeHTML(
+                        event.date ||
+                        "No date"
+                    )}
+
+                </div>
+
+
+                <button
+                    class="edit"
+                    onclick="editEvent('${event.id}')"
+                >
+                    ✏️ Edit
+                </button>
+
+
+                <button
+                    class="delete"
+                    onclick="deleteEvent('${event.id}')"
+                >
+                    🗑️ Delete
+                </button>
+
+            `;
+
+
+            list.appendChild(li);
+
+        }
+    );
 }
 
 
-/* APPLY SAVED THEME */
+// =====================================
+// APPLY SAVED THEME
+// =====================================
 
 function applyTheme() {
 
-    let theme =
-        localStorage.getItem("theme");
+    const theme =
+        localStorage.getItem(
+            "theme"
+        );
+
 
     if (theme === "dark") {
-        document.body.classList.add("dark-mode");
-    } else {
-        document.body.classList.remove("dark-mode");
+
+        document.body.classList.add(
+            "dark-mode"
+        );
+
+    }
+
+    else {
+
+        document.body.classList.remove(
+            "dark-mode"
+        );
+
     }
 }
 
 
-/* START */
+// =====================================
+// START
+// =====================================
 
 applyTheme();
-displayEvents();
+
+loadEvents();
 
 </script>
 
+
+<script src="auth.js"></script>
+
 </body>
+
 </html>

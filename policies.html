@@ -836,189 +836,131 @@
 
 <script>
 
+    const API_URL = "http://localhost:3000";
+    let policies = [];
+    let editId = null;
 
-    let editIndex = -1;
+    async function apiRequest(url, options = {}) {
+        const token = localStorage.getItem("token");
 
-
-    /* ================= DATA ================= */
-
-    function getPolicies() {
-
-        try {
-
-            return JSON.parse(
-                localStorage.getItem("policies")
-            ) || [];
-
+        if (!token) {
+            window.location.href = "login.html";
+            return null;
         }
 
-        catch (error) {
+        const response = await fetch(`${API_URL}${url}`, {
+            ...options,
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+                ...(options.headers || {})
+            }
+        });
 
-            return [];
-
+        if (response.status === 401) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            window.location.href = "login.html";
+            return null;
         }
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || "Something went wrong.");
+        }
+
+        return data;
     }
 
-
-    /* ================= ESCAPE HTML ================= */
-
     function escapeHTML(text) {
-
-        const div =
-            document.createElement("div");
-
-        div.textContent =
-            text ?? "";
-
+        const div = document.createElement("div");
+        div.textContent = text ?? "";
         return div.innerHTML;
     }
 
+    async function loadPolicies() {
+        try {
+            const data = await apiRequest("/api/policies");
 
-    /* ================= SAVE POLICY ================= */
+            if (!data) return;
 
-    function savePolicy() {
-
-        const title =
-            document
-                .getElementById("policyTitle")
-                .value
-                .trim();
-
-
-        const description =
-            document
-                .getElementById("policyDescription")
-                .value
-                .trim();
-
-
-        const category =
-            document
-                .getElementById("policyCategory")
-                .value;
-
-
-        if (title === "") {
-
-            showMessage(
-                "Please enter a policy title.",
-                "error-message"
-            );
-
-            return;
+            policies = Array.isArray(data) ? data : [];
+            displayPolicies();
+        } catch (error) {
+            console.error("Error loading policies:", error);
+            showMessage("Unable to load policies from server.", "error-message");
         }
-
-
-        const policies =
-            getPolicies();
-
-
-        const policy = {
-
-            title: title,
-
-            description: description,
-
-            category: category
-
-        };
-
-
-        if (editIndex === -1) {
-
-            policies.push(policy);
-
-            showMessage(
-                "Policy added successfully!",
-                "success-message"
-            );
-
-        }
-
-        else {
-
-            policies[editIndex] =
-                policy;
-
-            showMessage(
-                "Policy updated successfully!",
-                "success-message"
-            );
-
-            editIndex = -1;
-        }
-
-
-        localStorage.setItem(
-            "policies",
-            JSON.stringify(policies)
-        );
-
-
-        clearForm();
-
-        resetButton();
-
-        displayPolicies();
     }
 
+    async function savePolicy() {
+        const title = document.getElementById("policyTitle").value.trim();
+        const description = document.getElementById("policyDescription").value.trim();
+        const category = document.getElementById("policyCategory").value;
 
-    /* ================= EDIT ================= */
-
-    function editPolicy(index) {
-
-        const policies =
-            getPolicies();
-
-
-        const policy =
-            policies[index];
-
-
-        if (!policy) {
+        if (title === "") {
+            showMessage("Please enter a policy title.", "error-message");
             return;
         }
 
+        const policy = {
+            title,
+            description,
+            category
+        };
 
-        document.getElementById(
-            "policyTitle"
-        ).value =
-            policy.title || "";
+        try {
+            if (editId === null) {
+                const data = await apiRequest("/api/policies", {
+                    method: "POST",
+                    body: JSON.stringify(policy)
+                });
 
+                if (data) {
+                    policies.push(data.policy || data);
+                }
 
-        document.getElementById(
-            "policyDescription"
-        ).value =
-            policy.description || "";
+                showMessage("Policy added successfully!", "success-message");
+            } else {
+                const data = await apiRequest(`/api/policies/${editId}`, {
+                    method: "PUT",
+                    body: JSON.stringify(policy)
+                });
 
+                const updatedPolicy = data.policy || data;
+                const index = policies.findIndex(item => String(item.id) === String(editId));
 
-        document.getElementById(
-            "policyCategory"
-        ).value =
-            policy.category || "General";
+                if (index !== -1) {
+                    policies[index] = updatedPolicy;
+                }
 
+                showMessage("Policy updated successfully!", "success-message");
+            }
 
-        editIndex =
-            index;
+            editId = null;
+            clearForm();
+            resetButton();
+            displayPolicies();
+        } catch (error) {
+            console.error("Error saving policy:", error);
+            showMessage(error.message || "Unable to save policy.", "error-message");
+        }
+    }
 
+    function editPolicy(id) {
+        const policy = policies.find(item => String(item.id) === String(id));
 
-        document.getElementById(
-            "formTitle"
-        ).innerText =
-            "Edit Policy";
+        if (!policy) return;
 
+        document.getElementById("policyTitle").value = policy.title || "";
+        document.getElementById("policyDescription").value = policy.description || "";
+        document.getElementById("policyCategory").value = policy.category || "General";
 
-        document.getElementById(
-            "saveButton"
-        ).innerText =
-            "💾 Update Policy";
+        editId = policy.id;
 
-
-        document.getElementById(
-            "cancelButton"
-        ).style.display =
-            "inline-block";
-
+        document.getElementById("formTitle").innerText = "Edit Policy";
+        document.getElementById("saveButton").innerText = "💾 Update Policy";
+        document.getElementById("cancelButton").style.display = "inline-block";
 
         window.scrollTo({
             top: 0,
@@ -1026,412 +968,169 @@
         });
     }
 
+    async function deletePolicy(id) {
+        const policy = policies.find(item => String(item.id) === String(id));
 
-    /* ================= DELETE ================= */
+        if (!policy) return;
 
-    function deletePolicy(index) {
+        const confirmed = confirm(`Delete "${policy.title}"?`);
 
-        const policies =
-            getPolicies();
+        if (!confirmed) return;
 
+        try {
+            await apiRequest(`/api/policies/${id}`, {
+                method: "DELETE"
+            });
 
-        const policy =
-            policies[index];
+            policies = policies.filter(item => String(item.id) !== String(id));
 
+            if (String(editId) === String(id)) {
+                cancelEdit();
+            }
 
-        if (!policy) {
-            return;
+            displayPolicies();
+            showMessage("Policy deleted successfully!", "success-message");
+        } catch (error) {
+            console.error("Error deleting policy:", error);
+            showMessage(error.message || "Unable to delete policy.", "error-message");
         }
-
-
-        const confirmed =
-            confirm(
-                `Delete "${policy.title}"?`
-            );
-
-
-        if (!confirmed) {
-            return;
-        }
-
-
-        policies.splice(
-            index,
-            1
-        );
-
-
-        localStorage.setItem(
-            "policies",
-            JSON.stringify(policies)
-        );
-
-
-        if (editIndex === index) {
-            cancelEdit();
-        }
-
-
-        displayPolicies();
-
-
-        showMessage(
-            "Policy deleted successfully!",
-            "success-message"
-        );
     }
-
-
-    /* ================= CLEAR FORM ================= */
 
     function clearForm() {
-
-        document.getElementById(
-            "policyTitle"
-        ).value = "";
-
-
-        document.getElementById(
-            "policyDescription"
-        ).value = "";
-
-
-        document.getElementById(
-            "policyCategory"
-        ).value = "General";
+        document.getElementById("policyTitle").value = "";
+        document.getElementById("policyDescription").value = "";
+        document.getElementById("policyCategory").value = "General";
     }
 
-
-    /* ================= CANCEL ================= */
-
     function cancelEdit() {
-
-        editIndex = -1;
-
+        editId = null;
         clearForm();
-
         resetButton();
-
         clearMessage();
     }
 
-
-    /* ================= RESET BUTTON ================= */
-
     function resetButton() {
-
-        document.getElementById(
-            "formTitle"
-        ).innerText =
-            "Add New Policy";
-
-
-        document.getElementById(
-            "saveButton"
-        ).innerText =
-            "➕ Add Policy";
-
-
-        document.getElementById(
-            "cancelButton"
-        ).style.display =
-            "none";
+        document.getElementById("formTitle").innerText = "Add New Policy";
+        document.getElementById("saveButton").innerText = "➕ Add Policy";
+        document.getElementById("cancelButton").style.display = "none";
     }
 
+    function showMessage(message, className) {
+        const element = document.getElementById("message");
 
-    /* ================= MESSAGE ================= */
-
-    function showMessage(
-        message,
-        className
-    ) {
-
-        const element =
-            document.getElementById(
-                "message"
-            );
-
-
-        element.innerText =
-            message;
-
-
-        element.className =
-            className;
-
+        element.innerText = message;
+        element.className = className;
 
         setTimeout(function() {
-
             element.innerText = "";
-
             element.className = "";
-
         }, 3000);
     }
 
-
     function clearMessage() {
-
-        const element =
-            document.getElementById(
-                "message"
-            );
-
-
+        const element = document.getElementById("message");
         element.innerText = "";
-
         element.className = "";
     }
 
-
-    /* ================= DISPLAY ================= */
-
     function displayPolicies() {
+        const query = document
+            .getElementById("searchPolicy")
+            .value
+            .toLowerCase()
+            .trim();
 
-        const policies =
-            getPolicies();
-
-
-        const query =
-            document
-                .getElementById("searchPolicy")
-                .value
-                .toLowerCase()
-                .trim();
-
-
-        const categoryFilter =
-            document
-                .getElementById("categoryFilter")
-                .value;
-
-
-        const list =
-            document.getElementById(
-                "policyList"
-            );
-
+        const categoryFilter = document.getElementById("categoryFilter").value;
+        const list = document.getElementById("policyList");
 
         list.innerHTML = "";
 
+        const filtered = policies.filter(function(policy) {
+            const title = String(policy.title || "").toLowerCase();
+            const description = String(policy.description || "").toLowerCase();
+            const category = String(policy.category || "General").toLowerCase();
 
-        const filtered =
-            policies.filter(function(policy) {
+            const matchesSearch =
+                title.includes(query) ||
+                description.includes(query) ||
+                category.includes(query);
 
-                const title =
-                    String(
-                        policy.title || ""
-                    ).toLowerCase();
+            const matchesCategory =
+                categoryFilter === "" ||
+                (policy.category || "General") === categoryFilter;
 
+            return matchesSearch && matchesCategory;
+        });
 
-                const description =
-                    String(
-                        policy.description || ""
-                    ).toLowerCase();
-
-
-                const category =
-                    String(
-                        policy.category || "General"
-                    ).toLowerCase();
-
-
-                const matchesSearch =
-                    title.includes(query) ||
-                    description.includes(query) ||
-                    category.includes(query);
-
-
-                const matchesCategory =
-                    categoryFilter === "" ||
-                    (policy.category || "General")
-                        === categoryFilter;
-
-
-                return (
-                    matchesSearch &&
-                    matchesCategory
-                );
-
-            });
-
-
-        updateStatistics(
-            policies,
-            filtered.length
-        );
-
+        updateStatistics(policies, filtered.length);
 
         if (filtered.length === 0) {
-
             list.innerHTML = `
-
                 <div class="empty">
-
-                    <div class="empty-icon">
-                        📜
-                    </div>
-
-                    <h3>
-                        No policies found
-                    </h3>
-
-                    <p>
-                        Try adding a new policy
-                        or changing your search/filter.
-                    </p>
-
+                    <div class="empty-icon">📜</div>
+                    <h3>No policies found</h3>
+                    <p>Try adding a new policy or changing your search/filter.</p>
                 </div>
-
             `;
-
             return;
         }
 
+        filtered.forEach(function(policy) {
+            const category = policy.category || "General";
+            const card = document.createElement("div");
 
-        filtered.forEach(
-            function(policy) {
+            card.className = "policy-card";
 
-
-                const realIndex =
-                    policies.indexOf(
-                        policy
-                    );
-
-
-                const category =
-                    policy.category ||
-                    "General";
-
-
-                const card =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                card.className =
-                    "policy-card";
-
-
-                card.innerHTML = `
-
-                    <div class="policy-top">
-
-                        <div class="policy-title">
-                            ${escapeHTML(
-                                policy.title ||
-                                "Untitled Policy"
-                            )}
-                        </div>
-
-                        <span class="category">
-                            ${escapeHTML(category)}
-                        </span>
-
+            card.innerHTML = `
+                <div class="policy-top">
+                    <div class="policy-title">
+                        ${escapeHTML(policy.title || "Untitled Policy")}
                     </div>
+                    <span class="category">
+                        ${escapeHTML(category)}
+                    </span>
+                </div>
 
+                <div class="description">
+                    ${escapeHTML(policy.description || "No description provided.")}
+                </div>
 
-                    <div class="description">
-                        ${escapeHTML(
-                            policy.description ||
-                            "No description provided."
-                        )}
-                    </div>
+                <div class="policy-actions">
+                    <button class="edit" onclick="editPolicy('${escapeHTML(String(policy.id))}')">
+                        ✏️ Edit
+                    </button>
+                    <button class="delete" onclick="deletePolicy('${escapeHTML(String(policy.id))}')">
+                        🗑️ Delete
+                    </button>
+                </div>
+            `;
 
-
-                    <div class="policy-actions">
-
-                        <button
-                            class="edit"
-                            onclick="editPolicy(${realIndex})"
-                        >
-                            ✏️ Edit
-                        </button>
-
-
-                        <button
-                            class="delete"
-                            onclick="deletePolicy(${realIndex})"
-                        >
-                            🗑️ Delete
-                        </button>
-
-                    </div>
-
-                `;
-
-
-                list.appendChild(card);
-
-            }
-        );
+            list.appendChild(card);
+        });
     }
 
-
-    /* ================= STATISTICS ================= */
-
-    function updateStatistics(
-        policies,
-        filteredCount
-    ) {
-
+    function updateStatistics(policies, filteredCount) {
         let generalCount = 0;
 
-
-        policies.forEach(
-            function(policy) {
-
-                if (
-                    !policy.category ||
-                    policy.category === "General"
-                ) {
-
-                    generalCount++;
-
-                }
-
+        policies.forEach(function(policy) {
+            if (!policy.category || policy.category === "General") {
+                generalCount++;
             }
-        );
+        });
 
+        document.getElementById("totalPolicies").innerText = policies.length;
+        document.getElementById("generalPolicies").innerText = generalCount;
+        document.getElementById("filteredPolicies").innerText = filteredCount;
 
-        document.getElementById(
-            "totalPolicies"
-        ).innerText =
-            policies.length;
-
-
-        document.getElementById(
-            "generalPolicies"
-        ).innerText =
-            generalCount;
-
-
-        document.getElementById(
-            "filteredPolicies"
-        ).innerText =
-            filteredCount;
-
-
-        document.getElementById(
-            "recordCount"
-        ).innerText =
-
-            `${filteredCount} ${
-                filteredCount === 1
-                    ? "policy"
-                    : "policies"
-            }`;
+        document.getElementById("recordCount").innerText =
+            `${filteredCount} ${filteredCount === 1 ? "policy" : "policies"}`;
     }
 
-
-    /* ================= INITIAL LOAD ================= */
-
-    displayPolicies();
+    loadPolicies();
 
 </script>
 
-
+<script src="auth.js"></script>
 </body>
 
 </html>

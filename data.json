@@ -1,0 +1,57 @@
+{
+  "meetings": [],
+  "events": [],
+  "policies": [],
+  "tasks": [],
+  "documents": [],
+  "1790004027676": {
+    "meetings": [
+      {
+        "id": "1790009869340",
+        "title": "g",
+        "date": "2026-09-22",
+        "time": "",
+        "createdAt": "2026-09-21T16:57:49.341Z"
+      },
+      {
+        "id": "1790011794222",
+        "title": "j",
+        "date": "",
+        "time": "",
+        "createdAt": "2026-09-21T17:29:54.222Z"
+      },
+      {
+        "id": "1790011808499",
+        "title": "mm",
+        "date": "",
+        "time": "",
+        "createdAt": "2026-09-21T17:30:08.499Z"
+      },
+      {
+        "id": "1790011888392",
+        "title": "n",
+        "date": "",
+        "time": "",
+        "createdAt": "2026-09-21T17:31:28.392Z"
+      }
+    ],
+    "events": [],
+    "policies": [],
+    "tasks": [],
+    "documents": []
+  },
+  "1790431769772": {
+    "meetings": [],
+    "events": [],
+    "policies": [],
+    "tasks": [],
+    "documents": []
+  },
+  "1790437702222": {
+    "meetings": [],
+    "events": [],
+    "policies": [],
+    "tasks": [],
+    "documents": []
+  }
+}

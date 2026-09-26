@@ -2,14 +2,11 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Sagar Central - Dashboard</title>
 
     <style>
-
         * {
             margin: 0;
             padding: 0;
@@ -35,8 +32,6 @@
             background: var(--background);
             color: var(--text);
         }
-
-        /* ================= SIDEBAR ================= */
 
         .sidebar {
             width: 240px;
@@ -91,15 +86,11 @@
             background: var(--primary);
         }
 
-        /* ================= MAIN ================= */
-
         .main {
             margin-left: 240px;
             width: calc(100% - 240px);
             padding: 25px;
         }
-
-        /* ================= TOP BAR ================= */
 
         .topbar {
             background: var(--card);
@@ -122,15 +113,8 @@
             font-weight: bold;
         }
 
-        /* ================= WELCOME ================= */
-
         .welcome {
-            background: linear-gradient(
-                135deg,
-                #1976d2,
-                #125ca8
-            );
-
+            background: linear-gradient(135deg, #1976d2, #125ca8);
             color: white;
             padding: 28px;
             border-radius: 14px;
@@ -147,8 +131,6 @@
             line-height: 1.6;
             opacity: 0.95;
         }
-
-        /* ================= QUICK ACTIONS ================= */
 
         .quick-actions {
             display: grid;
@@ -181,8 +163,6 @@
             font-size: 22px;
             margin-bottom: 7px;
         }
-
-        /* ================= SEARCH ================= */
 
         .global-search {
             background: var(--card);
@@ -240,8 +220,6 @@
             margin-top: 4px;
         }
 
-        /* ================= STAT CARDS ================= */
-
         .cards {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -274,8 +252,6 @@
             font-weight: bold;
             color: var(--text);
         }
-
-        /* ================= CONTENT ================= */
 
         .content {
             display: grid;
@@ -341,8 +317,6 @@
             text-align: center;
         }
 
-        /* ================= FOOTER ================= */
-
         .footer {
             text-align: center;
             color: var(--muted);
@@ -350,18 +324,13 @@
             font-size: 13px;
         }
 
-        /* ================= RESPONSIVE ================= */
-
         @media(max-width: 1100px) {
-
             .quick-actions {
                 grid-template-columns: repeat(3, 1fr);
             }
-
         }
 
         @media(max-width: 900px) {
-
             .cards {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -369,11 +338,9 @@
             .content {
                 grid-template-columns: 1fr;
             }
-
         }
 
         @media(max-width: 650px) {
-
             .sidebar {
                 width: 190px;
             }
@@ -401,129 +368,50 @@
             .welcome h2 {
                 font-size: 20px;
             }
-
         }
-
     </style>
-
 </head>
 
 <body>
 
-<!-- ================= SIDEBAR ================= -->
-
 <aside class="sidebar">
-
     <div class="logo">
-
         <h2>Sagar Central</h2>
-
-        <p>
-            Enterprise Management System
-        </p>
-
+        <p>Enterprise Management System</p>
     </div>
 
     <ul class="menu">
-
-        <li>
-            <a href="index.html" class="active">
-                🏠 Dashboard
-            </a>
-        </li>
-
-        <li>
-            <a href="meetings.html">
-                📅 Meetings
-            </a>
-        </li>
-
-        <li>
-            <a href="events.html">
-                🎉 Events
-            </a>
-        </li>
-
-        <li>
-            <a href="policies.html">
-                📜 Policies
-            </a>
-        </li>
-
-        <li>
-            <a href="tasks.html">
-                ✅ Tasks
-            </a>
-        </li>
-
-        <li>
-            <a href="documents.html">
-                📄 Documents
-            </a>
-        </li>
-
-        <li>
-            <a href="ai-assistant.html">
-                🤖 AI Assistant
-            </a>
-        </li>
-
-        <li>
-            <a href="settings.html">
-                ⚙️ Settings
-            </a>
-        </li>
-
+        <li><a href="index.html" class="active">🏠 Dashboard</a></li>
+        <li><a href="meetings.html">📅 Meetings</a></li>
+        <li><a href="events.html">🎉 Events</a></li>
+        <li><a href="policies.html">📜 Policies</a></li>
+        <li><a href="tasks.html">✅ Tasks</a></li>
+        <li><a href="documents.html">📄 Documents</a></li>
+        <li><a href="ai-assistant.html">🤖 AI Assistant</a></li>
+        <li><a href="settings.html">⚙️ Settings</a></li>
     </ul>
-
 </aside>
-
-
-<!-- ================= MAIN ================= -->
 
 <main class="main">
 
-
-    <!-- TOP BAR -->
-
     <div class="topbar">
-
-        <h1>
-            Dashboard
-        </h1>
+        <h1>Dashboard</h1>
 
         <div class="profile">
-
             👤
-            <span id="profileName">
-                Admin
-            </span>
-
+            <span id="profileName">Admin</span>
         </div>
-
     </div>
 
-
-    <!-- WELCOME -->
-
     <div class="welcome">
-
-        <h2>
-            Welcome to Sagar Central 👋
-        </h2>
-
+        <h2>Welcome to Sagar Central 👋</h2>
         <p>
             Manage meetings, events, policies, tasks and
             documents from one centralized platform.
         </p>
-
     </div>
 
-
-    <!-- QUICK ACTIONS -->
-
     <div class="quick-actions">
-
         <a href="meetings.html" class="quick-action">
             <span>📅</span>
             Add Meeting
@@ -548,17 +436,10 @@
             <span>📄</span>
             Add Document
         </a>
-
     </div>
 
-
-    <!-- GLOBAL SEARCH -->
-
     <div class="global-search">
-
-        <h3>
-            🔍 Search Your Records
-        </h3>
+        <h3>🔍 Search Your Records</h3>
 
         <input
             type="text"
@@ -568,240 +449,167 @@
         >
 
         <div id="searchResults"></div>
-
     </div>
-
-
-    <!-- STATISTICS -->
 
     <div class="cards">
 
-
         <div class="card">
-
-            <h3>
-                📅 Total Meetings
-            </h3>
-
-            <div
-                class="number"
-                id="totalMeetings">
-                0
-            </div>
-
+            <h3>📅 Total Meetings</h3>
+            <div class="number" id="totalMeetings">0</div>
         </div>
 
-
         <div class="card">
-
-            <h3>
-                🎉 Total Events
-            </h3>
-
-            <div
-                class="number"
-                id="totalEvents">
-                0
-            </div>
-
+            <h3>🎉 Total Events</h3>
+            <div class="number" id="totalEvents">0</div>
         </div>
 
-
         <div class="card">
-
-            <h3>
-                📜 Total Policies
-            </h3>
-
-            <div
-                class="number"
-                id="totalPolicies">
-                0
-            </div>
-
+            <h3>📜 Total Policies</h3>
+            <div class="number" id="totalPolicies">0</div>
         </div>
 
-
         <div class="card">
-
-            <h3>
-                📆 Upcoming Events
-            </h3>
-
-            <div
-                class="number"
-                id="upcomingEvents">
-                0
-            </div>
-
+            <h3>📆 Upcoming Events</h3>
+            <div class="number" id="upcomingEvents">0</div>
         </div>
 
-
         <div class="card">
-
-            <h3>
-                ✅ Pending Tasks
-            </h3>
-
-            <div
-                class="number"
-                id="totalTasks">
-                0
-            </div>
-
+            <h3>✅ Pending Tasks</h3>
+            <div class="number" id="totalTasks">0</div>
         </div>
 
-
         <div class="card">
-
-            <h3>
-                📄 Documents
-            </h3>
-
-            <div
-                class="number"
-                id="totalDocuments">
-                0
-            </div>
-
+            <h3>📄 Documents</h3>
+            <div class="number" id="totalDocuments">0</div>
         </div>
-
 
     </div>
-
-
-    <!-- DASHBOARD CONTENT -->
 
     <div class="content">
 
-
-        <!-- MEETINGS -->
-
         <section class="section">
-
-            <h2>
-                📅 Upcoming Meetings
-            </h2>
-
+            <h2>📅 Upcoming Meetings</h2>
             <div id="upcomingMeetings">
-
-                <div class="empty">
-                    Loading meetings...
-                </div>
-
+                <div class="empty">Loading meetings...</div>
             </div>
-
         </section>
 
-
-        <!-- EVENTS -->
-
         <section class="section">
-
-            <h2>
-                🎉 Upcoming Events
-            </h2>
-
+            <h2>🎉 Upcoming Events</h2>
             <div id="upcomingEventList">
-
-                <div class="empty">
-                    Loading events...
-                </div>
-
+                <div class="empty">Loading events...</div>
             </div>
-
         </section>
 
-
-        <!-- TASKS -->
-
         <section class="section">
-
-            <h2>
-                ✅ Pending Tasks
-            </h2>
-
+            <h2>✅ Pending Tasks</h2>
             <div id="pendingTaskList">
-
-                <div class="empty">
-                    Loading tasks...
-                </div>
-
+                <div class="empty">Loading tasks...</div>
             </div>
-
         </section>
-
-
-        <!-- RECENT ACTIVITY -->
 
         <section class="section">
-
-            <h2>
-                🕐 Recent Activity
-            </h2>
-
+            <h2>🕐 Recent Activity</h2>
             <div id="recentActivity">
-
-                <div class="empty">
-                    Loading activity...
-                </div>
-
+                <div class="empty">Loading activity...</div>
             </div>
-
         </section>
-
 
     </div>
-
 
     <div class="footer">
-
         Sagar Central • Enterprise Management System
-
     </div>
-
 
 </main>
 
-
 <script>
+const API_URL = "http://localhost:3000";
 
-/* =====================================================
-   GET DATA FROM LOCAL STORAGE
-===================================================== */
+let meetings = [];
+let events = [];
+let policies = [];
+let tasks = [];
+let documents = [];
 
-function getData(key) {
-
-    try {
-
-        return JSON.parse(
-            localStorage.getItem(key)
-        ) || [];
-
-    } catch (error) {
-
-        return [];
-
-    }
-
+function escapeHTML(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
+async function apiRequest(url) {
+    const token = localStorage.getItem("token");
 
-/* =====================================================
-   UPDATE DASHBOARD
-===================================================== */
+    if (!token) {
+        window.location.href = "login.html";
+        return null;
+    }
+
+    const response = await fetch(`${API_URL}${url}`, {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    if (response.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "login.html";
+        return null;
+    }
+
+    const data = await response.json().catch(() => []);
+
+    if (!response.ok) {
+        throw new Error(data.message || "Unable to load dashboard data.");
+    }
+
+    return data;
+}
+
+async function loadDashboardData() {
+    try {
+        const results = await Promise.all([
+            apiRequest("/api/meetings"),
+            apiRequest("/api/events"),
+            apiRequest("/api/policies"),
+            apiRequest("/api/tasks"),
+            apiRequest("/api/documents")
+        ]);
+
+        if (!results.some(result => result === null)) {
+            meetings = Array.isArray(results[0]) ? results[0] : [];
+            events = Array.isArray(results[1]) ? results[1] : [];
+            policies = Array.isArray(results[2]) ? results[2] : [];
+            tasks = Array.isArray(results[3]) ? results[3] : [];
+            documents = Array.isArray(results[4]) ? results[4] : [];
+
+            updateDashboard();
+        }
+
+    } catch (error) {
+        console.error("Dashboard loading error:", error);
+
+        document.getElementById("upcomingMeetings").innerHTML =
+            '<div class="empty">Unable to load dashboard data.</div>';
+
+        document.getElementById("upcomingEventList").innerHTML =
+            '<div class="empty">Unable to load dashboard data.</div>';
+
+        document.getElementById("pendingTaskList").innerHTML =
+            '<div class="empty">Unable to load dashboard data.</div>';
+
+        document.getElementById("recentActivity").innerHTML =
+            '<div class="empty">Unable to load dashboard data.</div>';
+    }
+}
 
 function updateDashboard() {
-
-    const meetings = getData("meetings");
-    const events = getData("events");
-    const policies = getData("policies");
-    const tasks = getData("tasks");
-    const documents = getData("documents");
-
-
-    /* TOTAL COUNTS */
-
     document.getElementById("totalMeetings").innerText =
         meetings.length;
 
@@ -814,235 +622,131 @@ function updateDashboard() {
     document.getElementById("totalDocuments").innerText =
         documents.length;
 
-
-    /* TODAY */
-
     const today = new Date();
-
     today.setHours(0, 0, 0, 0);
 
-
-    /* UPCOMING EVENTS */
-
     const upcomingEvents = events.filter(function(event) {
-
         if (!event.date) {
             return false;
         }
 
         const date = new Date(event.date);
-
         date.setHours(0, 0, 0, 0);
 
-        return date >= today;
-
+        return !Number.isNaN(date.getTime()) && date >= today;
     });
-
 
     document.getElementById("upcomingEvents").innerText =
         upcomingEvents.length;
 
-
-    /* PENDING TASKS */
-
     const pendingTasks = tasks.filter(function(task) {
-
         return (task.status || "Pending") !== "Completed";
-
     });
-
 
     document.getElementById("totalTasks").innerText =
         pendingTasks.length;
 
-
-    /* DISPLAY */
-
     displayUpcomingMeetings(meetings);
-
     displayUpcomingEvents(upcomingEvents);
-
     displayPendingTasks(pendingTasks);
-
     displayRecentActivity();
-
 }
 
-
-/* =====================================================
-   UPCOMING MEETINGS
-===================================================== */
-
-function displayUpcomingMeetings(meetings) {
-
-    const box =
-        document.getElementById("upcomingMeetings");
-
-
-    box.innerHTML = "";
-
+function displayUpcomingMeetings(allMeetings) {
+    const box = document.getElementById("upcomingMeetings");
 
     const today = new Date();
-
     today.setHours(0, 0, 0, 0);
 
-
-    const upcoming = meetings
+    const upcoming = allMeetings
         .filter(function(meeting) {
-
             if (!meeting.date) {
                 return false;
             }
 
-            const date =
-                new Date(meeting.date);
-
+            const date = new Date(meeting.date);
             date.setHours(0, 0, 0, 0);
 
-            return date >= today;
-
+            return !Number.isNaN(date.getTime()) && date >= today;
         })
         .sort(function(a, b) {
-
-            return new Date(a.date) -
-                   new Date(b.date);
-
+            return new Date(a.date) - new Date(b.date);
         })
         .slice(0, 5);
 
-
     if (upcoming.length === 0) {
-
         box.innerHTML =
             '<div class="empty">No upcoming meetings.</div>';
-
         return;
-
     }
 
-
-    upcoming.forEach(function(meeting) {
-
-        box.innerHTML += `
-
+    box.innerHTML = upcoming.map(function(meeting) {
+        return `
             <div class="item">
-
                 <strong>
                     📅 ${escapeHTML(meeting.title || "Untitled Meeting")}
                 </strong>
 
                 <small>
-                    ${meeting.date || "No date"}
+                    ${escapeHTML(meeting.date || "No date")}
                     ${meeting.time
                         ? " • " + escapeHTML(meeting.time)
                         : ""}
                 </small>
-
             </div>
-
         `;
-
-    });
-
+    }).join("");
 }
 
+function displayUpcomingEvents(upcomingEvents) {
+    const box = document.getElementById("upcomingEventList");
 
-/* =====================================================
-   UPCOMING EVENTS
-===================================================== */
-
-function displayUpcomingEvents(events) {
-
-    const box =
-        document.getElementById("upcomingEventList");
-
-
-    box.innerHTML = "";
-
-
-    const upcoming =
-        [...events]
+    const upcoming = [...upcomingEvents]
         .sort(function(a, b) {
-
-            return new Date(a.date) -
-                   new Date(b.date);
-
+            return new Date(a.date) - new Date(b.date);
         })
         .slice(0, 5);
 
-
     if (upcoming.length === 0) {
-
         box.innerHTML =
             '<div class="empty">No upcoming events.</div>';
-
         return;
-
     }
 
-
-    upcoming.forEach(function(event) {
-
-        box.innerHTML += `
-
+    box.innerHTML = upcoming.map(function(event) {
+        return `
             <div class="item">
-
                 <strong>
                     🎉 ${escapeHTML(event.title || "Untitled Event")}
                 </strong>
 
                 <small>
-                    📅 ${event.date || "No date"}
+                    📅 ${escapeHTML(event.date || "No date")}
                 </small>
-
             </div>
-
         `;
-
-    });
-
+    }).join("");
 }
 
+function displayPendingTasks(pendingTasks) {
+    const box = document.getElementById("pendingTaskList");
 
-/* =====================================================
-   PENDING TASKS
-===================================================== */
-
-function displayPendingTasks(tasks) {
-
-    const box =
-        document.getElementById("pendingTaskList");
-
-
-    box.innerHTML = "";
-
-
-    if (tasks.length === 0) {
-
+    if (pendingTasks.length === 0) {
         box.innerHTML =
             '<div class="empty">No pending tasks 🎉</div>';
-
         return;
-
     }
 
-
-    tasks.slice(0, 5).forEach(function(task) {
-
-        const status =
-            task.status || "Pending";
-
+    box.innerHTML = pendingTasks.slice(0, 5).map(function(task) {
+        const status = task.status || "Pending";
 
         const badgeClass =
             status === "Completed"
                 ? "completed"
                 : "pending";
 
-
-        box.innerHTML += `
-
+        return `
             <div class="item">
-
                 <strong>
                     ✅ ${escapeHTML(task.title || "Untitled Task")}
                 </strong>
@@ -1050,284 +754,196 @@ function displayPendingTasks(tasks) {
                 <span class="badge ${badgeClass}">
                     ${escapeHTML(status)}
                 </span>
-
             </div>
-
         `;
-
-    });
-
+    }).join("");
 }
-
-
-/* =====================================================
-   RECENT ACTIVITY
-===================================================== */
 
 function displayRecentActivity() {
+    const box = document.getElementById("recentActivity");
 
-    const box =
-        document.getElementById("recentActivity");
+    const data = [];
 
-
-    let data = [];
-
-
-    getData("meetings").forEach(function(item) {
-
+    meetings.forEach(function(item) {
         data.push({
             title: item.title,
-            type: "Meeting"
+            type: "Meeting",
+            createdAt: item.createdAt || ""
         });
-
     });
 
-
-    getData("events").forEach(function(item) {
-
+    events.forEach(function(item) {
         data.push({
             title: item.title,
-            type: "Event"
+            type: "Event",
+            createdAt: item.createdAt || ""
         });
-
     });
 
-
-    getData("policies").forEach(function(item) {
-
+    policies.forEach(function(item) {
         data.push({
             title: item.title,
-            type: "Policy"
+            type: "Policy",
+            createdAt: item.createdAt || ""
         });
-
     });
 
-
-    getData("tasks").forEach(function(item) {
-
+    tasks.forEach(function(item) {
         data.push({
             title: item.title,
-            type: "Task"
+            type: "Task",
+            createdAt: item.createdAt || ""
         });
-
     });
 
-
-    getData("documents").forEach(function(item) {
-
+    documents.forEach(function(item) {
         data.push({
             title: item.title,
-            type: "Document"
+            type: "Document",
+            createdAt: item.createdAt || ""
         });
-
     });
 
+    data.sort(function(a, b) {
+        const timeA = a.createdAt
+            ? new Date(a.createdAt).getTime()
+            : 0;
 
-    box.innerHTML = "";
+        const timeB = b.createdAt
+            ? new Date(b.createdAt).getTime()
+            : 0;
 
+        return timeB - timeA;
+    });
 
     if (data.length === 0) {
-
         box.innerHTML =
             '<div class="empty">No activity yet.</div>';
-
         return;
-
     }
 
+    box.innerHTML = data.slice(0, 5).map(function(item) {
+        return `
+            <div class="item">
+                <strong>
+                    ${escapeHTML(item.title || "Untitled")}
+                </strong>
 
-    data
-        .slice(-5)
-        .reverse()
-        .forEach(function(item) {
-
-            box.innerHTML += `
-
-                <div class="item">
-
-                    <strong>
-                        ${escapeHTML(item.title || "Untitled")}
-                    </strong>
-
-                    <small>
-                        ${escapeHTML(item.type)}
-                    </small>
-
-                </div>
-
-            `;
-
-        });
-
+                <small>
+                    ${escapeHTML(item.type)}
+                </small>
+            </div>
+        `;
+    }).join("");
 }
 
-
-/* =====================================================
-   GLOBAL SEARCH
-===================================================== */
-
 function globalSearch() {
-
-    const query =
-        document
+    const query = document
         .getElementById("globalSearch")
         .value
         .toLowerCase()
         .trim();
 
-
     const results =
         document.getElementById("searchResults");
 
-
     results.innerHTML = "";
 
-
     if (query === "") {
-
         return;
-
     }
 
-
     const sources = [
-
         {
-            key: "meetings",
+            data: meetings,
             name: "Meeting",
             page: "meetings.html"
         },
-
         {
-            key: "events",
+            data: events,
             name: "Event",
             page: "events.html"
         },
-
         {
-            key: "policies",
+            data: policies,
             name: "Policy",
             page: "policies.html"
         },
-
         {
-            key: "tasks",
+            data: tasks,
             name: "Task",
             page: "tasks.html"
         },
-
         {
-            key: "documents",
+            data: documents,
             name: "Document",
             page: "documents.html"
         }
-
     ];
 
-
-    let found = [];
-
+    const found = [];
 
     sources.forEach(function(source) {
+        source.data.forEach(function(item) {
+            const text = JSON.stringify(item).toLowerCase();
 
-        getData(source.key)
-            .forEach(function(item) {
-
-                const text =
-                    JSON.stringify(item)
-                    .toLowerCase();
-
-
-                if (text.includes(query)) {
-
-                    found.push({
-
-                        title:
-                            item.title ||
-                            "Untitled",
-
-                        type:
-                            source.name,
-
-                        page:
-                            source.page
-
-                    });
-
-                }
-
-            });
-
+            if (text.includes(query)) {
+                found.push({
+                    title: item.title || "Untitled",
+                    type: source.name,
+                    page: source.page
+                });
+            }
+        });
     });
 
-
     if (found.length === 0) {
-
         results.innerHTML =
             '<div class="empty">No matching records found.</div>';
-
         return;
-
     }
 
+    results.innerHTML = found.slice(0, 10).map(function(item) {
+        return `
+            <div class="search-result">
+                <a href="${escapeHTML(item.page)}">
+                    ${escapeHTML(item.title)}
+                </a>
 
-    found
-        .slice(0, 10)
-        .forEach(function(item) {
-
-            results.innerHTML += `
-
-                <div class="search-result">
-
-                    <a href="${item.page}">
-                        ${escapeHTML(item.title)}
-                    </a>
-
-                    <div class="search-type">
-                        ${escapeHTML(item.type)}
-                    </div>
-
+                <div class="search-type">
+                    ${escapeHTML(item.type)}
                 </div>
-
-            `;
-
-        });
-
+            </div>
+        `;
+    }).join("");
 }
 
+function loadProfileName() {
+    const userText = localStorage.getItem("user");
 
-/* =====================================================
-   SECURITY HELPER
-===================================================== */
+    if (userText) {
+        try {
+            const user = JSON.parse(userText);
 
-function escapeHTML(value) {
+            if (user && user.name) {
+                document.getElementById("profileName").innerText =
+                    user.name;
+                return;
+            }
+        } catch (error) {
+            console.error("Unable to read user profile:", error);
+        }
+    }
 
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
+    document.getElementById("profileName").innerText =
+        localStorage.getItem("profileName") || "Admin";
 }
 
-
-/* =====================================================
-   PROFILE NAME
-===================================================== */
-
-document.getElementById("profileName").innerText =
-    localStorage.getItem("profileName") || "Admin";
-
-
-/* =====================================================
-   START DASHBOARD
-===================================================== */
-
-updateDashboard();
-
+loadProfileName();
+loadDashboardData();
 </script>
 
-</body>
+<script src="auth.js"></script>
 
+</body>
 </html>

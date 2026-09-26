@@ -1,0 +1,23 @@
+[
+  {
+    "id": "1790004027676",
+    "name": "Ravikant",
+    "email": "ravikant@test.com",
+    "password": "$2b$10$QmnxgLWvv2NSRDcycrH0.Ojt1nSTiJgvRl1.9KH2ADuzJym1yOzrG",
+    "createdAt": "2026-09-21T15:20:27.676Z"
+  },
+  {
+    "id": "1790431769772",
+    "name": "Ravikant",
+    "email": "raviknat@gmail.com",
+    "password": "$2b$10$6sMr8SkYximLrXhTAvdgg.008Krdv6NKeMJNzXO4DgoD57njPP3GO",
+    "createdAt": "2026-09-26T14:09:29.772Z"
+  },
+  {
+    "id": "1790437702222",
+    "name": "Ravi",
+    "email": "kantravi.rk05@gmail.com",
+    "password": "$2b$10$QMee6kaarJSHNXud44caaOrFZmP3lGCtWxNOMkmQkVVWFRQEz6Voe",
+    "createdAt": "2026-09-26T15:48:22.222Z"
+  }
+]
